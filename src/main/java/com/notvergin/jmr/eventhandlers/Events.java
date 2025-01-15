@@ -1,10 +1,5 @@
-package com.notvergin.JMR.EventHandlers;
+package com.notvergin.jmr.eventhandlers;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.entity.Entity;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
