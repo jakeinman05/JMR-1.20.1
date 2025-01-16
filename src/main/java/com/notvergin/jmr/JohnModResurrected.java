@@ -66,7 +66,14 @@ public class JohnModResurrected
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS)
+        {
             event.accept(ModItems.JOHN_TEAR);
+            event.accept(ModItems.IMMORTALITY_GEM);
+        }
+        if(event.getTabKey() == CreativeModeTabs.COMBAT)
+        {
+            event.accept(ModItems.IMMORTALITY_SWORD);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
