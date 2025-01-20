@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "jmresurrected:immortality_shard"
+    }
+  },
+  "result": {
+    "item": "jmresurrected:immortality_gem",
+    "count": 1
+  }
+}
