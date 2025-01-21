@@ -7,6 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.notvergin.jmr.JohnModResurrected.MODID;
@@ -21,8 +22,11 @@ public class ModItemModelProvider extends ItemModelProvider
     protected void registerModels() {
         buildItem(ModItems.IMMORTALITY_GEM);
         buildItem(ModItems.JOHN_TEAR);
+        buildItem(ModItems.IMMORTALITY_SHARD);
 
         buildHandheldItem(ModItems.IMMORTALITY_SWORD);
+
+        withExistingParent(ModItems.JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
     }
 
     private ItemModelBuilder buildItem(RegistryObject<Item> item)

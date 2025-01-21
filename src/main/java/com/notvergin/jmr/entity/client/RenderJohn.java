@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import static com.notvergin.jmr.JohnModResurrected.MODID;
 
@@ -16,8 +17,9 @@ public class RenderJohn extends MobRenderer<JohnEntity, JohnModel<JohnEntity>>
     }
 
     @Override
-    public ResourceLocation getTextureLocation(JohnEntity pEntity) {
-        return new ResourceLocation(MODID + "textures/entity/john.png");
+    public ResourceLocation getTextureLocation(@NotNull JohnEntity pEntity)
+    {
+        return new ResourceLocation(MODID, "textures/entity/john.png");
     }
 
 }

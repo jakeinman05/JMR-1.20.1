@@ -2,5 +2,7 @@
   "item.jmresurrected.john_tear" : "John Tear",
   "item.jmresurrected.immortality_gem" : "Immortality Gem",
   "item.jmresurrected.immortality_shard" : "Immortality Shard",
-  "item.jmresurrected.immortality_sword" : "Immortal Blade"
+  "item.jmresurrected.immortality_sword" : "Immortal Blade",
+  "entity.jmresurrected.john": "John",
+  "item.jmresurrected.john_spawn_egg": "John Egg"
 }

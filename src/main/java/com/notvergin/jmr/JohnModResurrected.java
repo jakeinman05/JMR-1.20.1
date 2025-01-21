@@ -1,7 +1,11 @@
 package com.notvergin.jmr;
 
 import com.mojang.logging.LogUtils;
+import com.notvergin.jmr.entity.ModEntities;
+import com.notvergin.jmr.entity.client.RenderJohn;
 import com.notvergin.jmr.registries.ModItems;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -47,6 +51,7 @@ public class JohnModResurrected
         modEventBus.addListener(this::commonSetup);
 
         ModItems.register(modEventBus);
+        ModEntities.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
 
@@ -69,10 +74,12 @@ public class JohnModResurrected
         {
             event.accept(ModItems.JOHN_TEAR);
             event.accept(ModItems.IMMORTALITY_GEM);
+            event.accept(ModItems.IMMORTALITY_SHARD);
         }
         if(event.getTabKey() == CreativeModeTabs.COMBAT)
         {
             event.accept(ModItems.IMMORTALITY_SWORD);
+            event.accept(ModItems.JOHN_EGG);
         }
     }
 
@@ -85,6 +92,8 @@ public class JohnModResurrected
     public static class ClientModEvents
     {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {}
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            EntityRenderers.register(ModEntities.JOHN.get(), RenderJohn::new);
+        }
     }
 }
