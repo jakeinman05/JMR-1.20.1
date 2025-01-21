@@ -1,6 +1,6 @@
 package com.notvergin.jmr.entity.mobs;
 
-import com.notvergin.jmr.entity.goals.NewRunAtNoSightGoal;
+import com.notvergin.jmr.entity.goals.RunAtNoSightGoal;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -74,7 +74,7 @@ public class JohnEntity extends Monster
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.5f));
         this.targetSelector.addGoal(1, new MeleeAttackGoal(this, 1.0f, true));
-        this.targetSelector.addGoal(2, new NewRunAtNoSightGoal(this, 0.46f));
+        this.targetSelector.addGoal(2, new RunAtNoSightGoal(this, 0.46f));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<Villager>(this, Villager.class, true));
     }
 
