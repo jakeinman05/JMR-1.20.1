@@ -1,6 +1,7 @@
 package com.notvergin.jmr;
 
 import com.mojang.logging.LogUtils;
+import com.notvergin.jmr.mobeffects.RegisterBrewingRecipe;
 import com.notvergin.jmr.mobeffects.potions.ModPotions;
 import com.notvergin.jmr.entity.ModEntities;
 import com.notvergin.jmr.entity.client.RenderJohn;
@@ -68,7 +69,9 @@ public class JohnModResurrected
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {}
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        RegisterBrewingRecipe.registerCustomBrewingRecipes();
+    }
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
