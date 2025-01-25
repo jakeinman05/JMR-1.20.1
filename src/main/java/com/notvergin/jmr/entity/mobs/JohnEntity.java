@@ -162,30 +162,35 @@ public class JohnEntity extends Monster
     public static boolean canSpawn(EntityType<JohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosistion, RandomSource random)
     {
         System.out.println("canSpawn Called");
-        if(pLevel instanceof ServerLevel sLevel)
-        {
+        if (pLevel instanceof ServerLevel sLevel) {
+            // Get the local difficulty for this position
             DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosistion);
-            float clampedDiff = difficulty.getEffectiveDifficulty();
+            float localDifficulty = difficulty.getEffectiveDifficulty(); // Local difficulty between 0.0 and ~4.0
 
-            double k = 1.5;
-            double x0 = 2.0;
-            // sigmoid
-            double spawnChance = 1.0f / (1.0f + Math.exp(-k * (clampedDiff - x0)));
-            spawnChance = Math.min(1.0f, Math.max(0.0, spawnChance));
+            // Log the local difficulty for debugging
+            System.out.println("Local Difficulty: " + localDifficulty);
 
+            // Sigmoid function parameters
+            double k = 1.0d;  // Slope factor (you can adjust this to control how steep the growth is)
+            double x0 = 3.6d; // Inflection point (this is where the spawn chance will change most rapidly)
 
-            if(sLevel.isRainingAt(sPosistion) || sLevel.isThundering())
-                spawnChance *= 1.5f;
+            // Calculate spawn chance using a sigmoid function
+            double spawnChance = 1.0 / (1.0 + Math.exp(-k * (localDifficulty - x0))); // Sigmoid curve
+            spawnChance = Math.min(1.0, Math.max(0.0, spawnChance)); // Clamp to 0-1 range
 
-            long worldTime = sLevel.getGameTime() % 24000;
-            spawnChance *= worldTime >= 13000 && worldTime <= 23000 ? 1.5f : 1.0f;
+            // Apply additional spawn chance if it's raining or thundering
+            if (sLevel.isRainingAt(sPosistion) || sLevel.isThundering()) {
+                spawnChance *= 1.5;  // Increase spawn chance during rain or thunder
+            }
 
-            //return random.nextDouble() < spawnChance;
-            System.out.println("Spawn work");
+            // Log the spawn chance for debugging
+            System.out.println("Spawn Chance: " + spawnChance);
+
+            // Determine if the mob should spawn
             return random.nextDouble() < spawnChance;
         }
         System.out.println("canSpawn Failed Level not on Server");
-        return true;
+        return false;
     }
 
     @Override
