@@ -1,10 +1,13 @@
-package com.notvergin.jmr.registries;
+package com.notvergin.jmr.customitems;
 
 import com.notvergin.jmr.customitems.item.ImmortalGem;
+import com.notvergin.jmr.customitems.item.ImmortalHusk;
 import com.notvergin.jmr.customitems.item.ImmortalShard;
 import com.notvergin.jmr.customitems.weapons.ImmortalBlade;
 import com.notvergin.jmr.entity.ModEntities;
+import com.sun.jna.platform.unix.solaris.LibKstat;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tiers;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -27,6 +30,8 @@ public class ModItems
             () -> new ImmortalShard(new Item.Properties()));
     public static final RegistryObject<Item> IMMORTALITY_GEM = ITEMS.register("immortality_gem",
             () -> new ImmortalGem(new Item.Properties().rarity(Rarity.RARE)));
+    public static final RegistryObject<Item> IMMORTAL_HUSK = ITEMS.register("immortal_husk",
+            () -> new ImmortalHusk(new Item.Properties().rarity(Rarity.RARE)));
 
     // Tools
     public static final RegistryObject<Item> IMMORTALITY_SWORD = ITEMS.register("immortality_sword",

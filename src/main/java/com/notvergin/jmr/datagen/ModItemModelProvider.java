@@ -1,13 +1,12 @@
 package com.notvergin.jmr.datagen;
 
-import com.notvergin.jmr.registries.ModItems;
+import com.notvergin.jmr.customitems.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.notvergin.jmr.JohnModResurrected.MODID;
@@ -23,6 +22,7 @@ public class ModItemModelProvider extends ItemModelProvider
         buildItem(ModItems.IMMORTALITY_GEM);
         buildItem(ModItems.JOHN_TEAR);
         buildItem(ModItems.IMMORTALITY_SHARD);
+        buildItem(ModItems.IMMORTAL_HUSK);
 
         buildHandheldItem(ModItems.IMMORTALITY_SWORD);
 
