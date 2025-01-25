@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "XOX",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "item": "jmresurrected:john_tear"
+    },
+    "O": {
+      "item": "jmresurrected:immortality_gem"
+    }
+  },
+  "result": {
+    "item": "jmresurrected:immortal_husk",
+    "count": 1
+  }
+}

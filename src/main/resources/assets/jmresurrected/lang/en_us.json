@@ -2,6 +2,7 @@
   "item.jmresurrected.john_tear" : "John Tear",
   "item.jmresurrected.immortality_gem" : "Immortality Gem",
   "item.jmresurrected.immortality_shard" : "Immortality Shard",
+  "item.jmresurrected.immortal_husk": "Immortal Husk",
 
   "item.jmresurrected.immortality_sword" : "Immortal Blade",
 
@@ -9,5 +10,8 @@
   "item.jmresurrected.john_spawn_egg": "John Egg",
 
   "effect.jmresurrected.immortal": "Immortality",
-  "item.minecraft.potion.effect.immortal_potion": "Immortality Potion"
+  "item.minecraft.potion.effect.immortal_potion": "Potion of Immortality",
+  "item.minecraft.splash_potion.effect.immortal_potion": "Splash Potion of Immortality",
+  "item.minecraft.lingering_potion.effect.immortal_potion": "Lingering Potion of Immortality",
+  "item.minecraft.tipped_arrow.effect.immortal_potion": "Arrow of Immortality"
 }
