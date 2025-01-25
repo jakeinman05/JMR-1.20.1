@@ -1,10 +1,11 @@
 package com.notvergin.jmr;
 
 import com.mojang.logging.LogUtils;
+import com.notvergin.jmr.mobeffects.potions.ModPotions;
 import com.notvergin.jmr.entity.ModEntities;
 import com.notvergin.jmr.entity.client.RenderJohn;
-import com.notvergin.jmr.registries.ModItems;
-import net.minecraft.client.renderer.entity.EntityRenderer;
+import com.notvergin.jmr.mobeffects.ModMobEffects;
+import com.notvergin.jmr.customitems.ModItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
@@ -52,6 +53,8 @@ public class JohnModResurrected
 
         ModItems.register(modEventBus);
         ModEntities.register(modEventBus);
+        ModMobEffects.register(modEventBus);
+        ModPotions.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
 
@@ -75,6 +78,7 @@ public class JohnModResurrected
             event.accept(ModItems.JOHN_TEAR);
             event.accept(ModItems.IMMORTALITY_GEM);
             event.accept(ModItems.IMMORTALITY_SHARD);
+            event.accept(ModItems.IMMORTAL_HUSK);
         }
         if(event.getTabKey() == CreativeModeTabs.COMBAT)
         {

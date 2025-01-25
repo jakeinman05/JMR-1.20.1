@@ -1,8 +1,6 @@
 package com.notvergin.jmr.entity;
 
-import com.google.common.util.concurrent.ClosingFuture;
 import com.notvergin.jmr.entity.mobs.JohnEntity;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,7 +17,9 @@ public class ModEntities
 
     public static final RegistryObject<EntityType<JohnEntity>> JOHN =
             ENTITY_TYPES.register("john", () -> EntityType.Builder.of(JohnEntity::new, MobCategory.MONSTER)
-                    .sized(1.0F, 4.0F).build("john"));
+                    .sized(0.8F, 4.0F)
+                    .setTrackingRange(64)
+                    .build("john"));
 
     public static void register(IEventBus eventBus)
     {
