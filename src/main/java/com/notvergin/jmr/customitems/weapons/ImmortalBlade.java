@@ -36,6 +36,8 @@ public class ImmortalBlade extends SwordItem
     @Override
     public boolean isFoil(ItemStack stack) { return true; }
 
+
+
     // ideas
 
     // right click:

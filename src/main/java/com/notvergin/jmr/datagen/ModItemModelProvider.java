@@ -25,6 +25,7 @@ public class ModItemModelProvider extends ItemModelProvider
         buildItem(ModItems.IMMORTAL_HUSK);
 
         buildHandheldItem(ModItems.IMMORTALITY_SWORD);
+        buildHandheldItem(ModItems.UIMMORTALITY_SWORD);
 
         withExistingParent(ModItems.JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
     }

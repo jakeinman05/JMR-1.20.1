@@ -1,19 +1,14 @@
 package com.notvergin.jmr.eventhandlers;
 
-import com.notvergin.jmr.customitems.weapons.ImmortalBlade;
 import com.notvergin.jmr.entity.mobs.JohnEntity;
 import com.notvergin.jmr.mobeffects.ModMobEffects;
-import com.notvergin.jmr.mobeffects.potions.ModPotions;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PotionItem;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -37,9 +32,12 @@ public class Events
         {
             if(entity.hasEffect(ModMobEffects.IMMORTAL_EFFECT.get()))
             {
-                entity.knockback(0, 0 ,0);
                 event.setCanceled(true);
             }
         }
     }
+
+    // LivingEntityDamageEvent
+    //  go through entity.getArmorSlots and check for unbreakable tag then cancel the event
+    // LivingEntityUseItemEvent and do same thing for mainHandItem
 }

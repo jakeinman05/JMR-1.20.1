@@ -23,12 +23,11 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -43,6 +42,7 @@ public class JohnEntity extends Monster
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
+    private final AABB boundingBox = new AABB(this.getX() - 0.4, this.getY(), this.getZ() - 0.4, this.getX() + 0.4, this.getY() + 4.0, this.getZ() + 0.4);
     //public boolean hasFleed = false;
 
     private void setupAnimationStates()
@@ -133,7 +133,10 @@ public class JohnEntity extends Monster
         {
             ItemStack handItem = player.getMainHandItem();
             if(handItem.getItem() instanceof ImmortalBlade)
-                pAmount *= 1.6f;
+            {
+                pAmount *= 2.0f;
+            }
+
         }
         return super.hurt(pSource, pAmount);
     }
@@ -222,12 +225,21 @@ public class JohnEntity extends Monster
     }
 
     @Override
+    public AABB getBoundingBoxForCulling() {
+        return boundingBox;
+    }
+
+    @Override
     public void checkDespawn()
     {
-        if(this.getTarget() == null)
-        {
-            super.checkDespawn();
-        }
+        if(this.getTarget() != null)
+            return;
+
+
+        if(this.level().getNearestPlayer(this, 128) != null)
+            return;
+
+        super.checkDespawn();
     }
 
     @Override
