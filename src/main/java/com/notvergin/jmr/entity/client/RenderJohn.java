@@ -15,7 +15,7 @@ import static com.notvergin.jmr.JohnModResurrected.MODID;
 public class RenderJohn extends MobRenderer<JohnEntity, JohnModel<JohnEntity>>
 {
     public RenderJohn(EntityRendererProvider.Context pContext) {
-        super(pContext, new JohnModel<>(pContext.bakeLayer(ModModelLayers.JOHN_LAYER)), 1.0F);
+        super(pContext, new JohnModel<>(pContext.bakeLayer(ModModelLayers.JOHN_LAYER)), 0.4F);
     }
 
     @Override
