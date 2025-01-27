@@ -2,6 +2,7 @@ package com.notvergin.jmr.eventhandlers;
 
 import com.notvergin.jmr.entity.mobs.JohnEntity;
 import com.notvergin.jmr.mobeffects.ModMobEffects;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,22 +12,12 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
-public class Events
+public class CommonEvents
 {
-    @SubscribeEvent
-    public static void onVillagerSpawn(EntityJoinLevelEvent event)
-    {
-        if(event.getEntity() instanceof Villager villager)
-        {
-            villager.goalSelector.addGoal(1, new AvoidEntityGoal<>(villager, JohnEntity.class, 16.0f, 1.0f, 1.3f));
-        }
-    }
-
     @SubscribeEvent
     public static void onImmortalEffect(LivingHurtEvent event)
     {
@@ -51,6 +42,18 @@ public class Events
 
                     }
                 }
+            }
+        }
+
+        if(mob instanceof JohnEntity john)
+        {
+            // john can become immortal 1/10 chance
+            if(john.getRandom().nextInt(10) == 0)
+            {
+                event.setCanceled(true);
+                // add sound to signify as well?
+                MobEffectInstance johnImmortal = new MobEffectInstance(ModMobEffects.IMMORTAL_EFFECT.get(), 100);
+                john.addEffect(johnImmortal);
             }
         }
     }
