@@ -1,0 +1,20 @@
+{
+  "john_ambient": {
+    "subtitles": "sounds.jmresurrected.john_ambient",
+    "sounds": [
+      "jmresurrected:john_ambient"
+    ]
+  },
+  "john_hurt": {
+    "subtitles": "sounds.jmresurrected.john_hurt",
+    "sounds": [
+      "jmresurrected:john_hurt"
+    ]
+  },
+  "john_death": {
+    "subtitles": "sounds.jmresurrected.john_death",
+    "sounds": [
+      "jmresurrected:john_death"
+    ]
+  }
+}
