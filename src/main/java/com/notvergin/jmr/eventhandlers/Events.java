@@ -3,9 +3,12 @@ package com.notvergin.jmr.eventhandlers;
 import com.notvergin.jmr.entity.mobs.JohnEntity;
 import com.notvergin.jmr.mobeffects.ModMobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -33,6 +36,21 @@ public class Events
             if(entity.hasEffect(ModMobEffects.IMMORTAL_EFFECT.get()))
             {
                 event.setCanceled(true);
+
+                Iterable<ItemStack> armorItems = entity.getArmorSlots();
+                for(ItemStack armorItem : armorItems)
+                {
+                    if(!armorItem.isEmpty() && armorItem.isDamageableItem())
+                    {
+                        EquipmentSlot slot = Mob.getEquipmentSlotForItem(armorItem);
+                        if(slot != null && slot.getType() == EquipmentSlot.Type.ARMOR)
+                        {
+                            armorItem.hurtAndBreak((int)event.getAmount(), entity,
+                                    (e) -> e.broadcastBreakEvent(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, slot.getIndex())));
+                        }
+
+                    }
+                }
             }
         }
     }
