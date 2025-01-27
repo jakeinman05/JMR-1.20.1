@@ -1,7 +1,6 @@
 package com.notvergin.jmr.entity.mobs;
 
 import com.notvergin.jmr.customitems.weapons.ImmortalBlade;
-import com.notvergin.jmr.entity.goals.JohnChaseGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -42,8 +41,12 @@ public class JohnEntity extends Monster
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
-    private final AABB boundingBox = new AABB(this.getX() - 0.4, this.getY(), this.getZ() - 0.4, this.getX() + 0.4, this.getY() + 4.0, this.getZ() + 0.4);
-    //public boolean hasFleed = false;
+
+    public int stuckTime = 0;
+    public int reachCooldown = 0;
+    public boolean isStuck = false;
+
+    public boolean hasTarget = false;
 
     private void setupAnimationStates()
     {
@@ -76,7 +79,7 @@ public class JohnEntity extends Monster
     {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 64.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.46D)
+                .add(Attributes.MOVEMENT_SPEED, 0.38D)
                 .add(Attributes.ARMOR, 8.0D)
                 .add(Attributes.ATTACK_DAMAGE, 9.5D)
                 .add(Attributes.MAX_HEALTH, 70.0D)
@@ -85,16 +88,16 @@ public class JohnEntity extends Monster
 
     protected void registerGoals()
     {
-        // add runaway goal (regen health aswell)
+        // add runaway goal (regen health as well)
         // maybe also rage goal (more damage speed and maybe sound)
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        //this.goalSelector.addGoal(2, new JohnFleeGoal(this, 16.0f, 20));
+        this.goalSelector.addGoal(3, new JohnReachTargetGoal(this));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.5f));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.5f));
         this.targetSelector.addGoal(1, new MeleeAttackGoal(this, 1.0f, true));
         this.targetSelector.addGoal(2, new JohnChaseGoal(this).setUnseenMemoryTicks(600));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<Villager>(this, Villager.class, false, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
     }
 
     @Override
@@ -120,6 +123,21 @@ public class JohnEntity extends Monster
         }
 
         super.tick();
+
+        if(hasTarget)
+        {
+            if(navigation.isDone())
+                stuckTime++;
+            else stuckTime = 0;
+
+            if(stuckTime > 60)
+                isStuck = true;
+
+            else isStuck = false;
+        }
+        //else System.out.println("nav done");
+
+        reachCooldown--;
 
         this.setMaxUpStep(1.0f);
 
@@ -162,37 +180,26 @@ public class JohnEntity extends Monster
         }
     }
 
-    public static boolean canSpawn(EntityType<JohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosistion, RandomSource random)
+    public static boolean canSpawn(EntityType<JohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosition, RandomSource random)
     {
-        System.out.println("canSpawn Called");
-        if (pLevel instanceof ServerLevel sLevel) {
-            // Get the local difficulty for this position
-            DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosistion);
-            float localDifficulty = difficulty.getEffectiveDifficulty(); // Local difficulty between 0.0 and ~4.0
+        if (pLevel instanceof ServerLevel sLevel)
+        {
+            DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
+            float localDifficulty = difficulty.getEffectiveDifficulty();
 
-            // Log the local difficulty for debugging
-            System.out.println("Local Difficulty: " + localDifficulty);
+            double k = 1.0d;  // slope factor
+            double x0 = 3.6d; // inflection point
 
-            // Sigmoid function parameters
-            double k = 1.0d;  // Slope factor (you can adjust this to control how steep the growth is)
-            double x0 = 3.6d; // Inflection point (this is where the spawn chance will change most rapidly)
+            // sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve
+            double spawnChance = 1.0 / (1.0 + Math.exp(-k * (localDifficulty - x0)));
+            spawnChance = Math.min(1.0, Math.max(0.0, spawnChance)); // clamps to 0-1 range
 
-            // Calculate spawn chance using a sigmoid function
-            double spawnChance = 1.0 / (1.0 + Math.exp(-k * (localDifficulty - x0))); // Sigmoid curve
-            spawnChance = Math.min(1.0, Math.max(0.0, spawnChance)); // Clamp to 0-1 range
-
-            // Apply additional spawn chance if it's raining or thundering
-            if (sLevel.isRainingAt(sPosistion) || sLevel.isThundering()) {
-                spawnChance *= 1.5;  // Increase spawn chance during rain or thunder
+            if (sLevel.isRainingAt(sPosition) || sLevel.isThundering()) {
+                spawnChance *= 1.5;  // increase spawn chance during rain or thunder
             }
 
-            // Log the spawn chance for debugging
-            System.out.println("Spawn Chance: " + spawnChance);
-
-            // Determine if the mob should spawn
             return random.nextDouble() < spawnChance;
         }
-        System.out.println("canSpawn Failed Level not on Server");
         return false;
     }
 
@@ -225,16 +232,10 @@ public class JohnEntity extends Monster
     }
 
     @Override
-    public AABB getBoundingBoxForCulling() {
-        return boundingBox;
-    }
-
-    @Override
     public void checkDespawn()
     {
         if(this.getTarget() != null)
             return;
-
 
         if(this.level().getNearestPlayer(this, 128) != null)
             return;
@@ -253,146 +254,155 @@ public class JohnEntity extends Monster
         return 3.75f;
     }
 
+    static class JohnChaseGoal extends NearestAttackableTargetGoal<LivingEntity>
+    {
+        private final JohnEntity john;
+        private LivingEntity currentTarget;
+        public boolean flag = false;
 
-//    static class JohnFleeGoal extends Goal
-//    {
-//        Mob mob;
-//        LivingEntity currentTarget;
-//        // has to be hidden for 2 seconds
-//        public int hideCount;
-//        // able to run for 15 seconds
-//        public int runCount;
-//        private BlockPos targetPos;
-//        boolean hiding = false;
-//        boolean running = false;
-//
-//        public JohnFleeGoal(PathfinderMob pMob)
-//        {
-//            this.mob = pMob;
-//            this.currentTarget = JohnChaseGoal.currentTarget;
-//        }
-//
-//        @Override
-//        public boolean canUse() {
-//            if(this.mob.getHealth() < this.mob.getMaxHealth()/3 && currentTarget != null)
-//            {
-//                if(!hiding || !running)
-//                    targetPos = findHidableBlock();
-//                return targetPos != null;
-//            }
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean canContinueToUse()
-//        {
-//            return runCount > 0 && hideCount >=0 && targetPos != null;
-//        }
-//
-//        @Override
-//        public void start() {
-//            if(targetPos != null)
-//            {
-//                hiding = false;
-//                running = true;
-//                runCount = 300;
-//                hideCount = 20;
-//                this.mob.getNavigation().moveTo(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1.0F);
-//                System.out.println("StartedHiding");
-//            }
-//        }
-//
-//        @Override
-//        public void stop() {
-//            hiding = false;
-//            running = false;
-//            mob.getNavigation().stop();
-//            JohnChaseGoal.currentTarget = currentTarget;
-//        }
-//
-//        @Override
-//        public void tick()
-//        {
-//            if(!currentTarget.hasLineOfSight(this.mob))
-//            {
-//                if(!hiding && hideCount >= 0)
-//                {
-//                    hiding = true;
-//                    running = false;
-//                    System.out.println("Hiding");
-//                    this.mob.getNavigation().stop();
-//                    this.mob.heal(1);
-//                    hideCount--;
-//                }
-//                else {
-//                    if(hiding)
-//                    {
-//                        hiding = false;
-//                        running = true;
-//                        targetPos = findHidableBlock();
-//                    }
-//                }
-//            }
-//
-//            runCount--;
-//            super.tick();
-//        }
-//
-//        private BlockPos findHidableBlock()
-//        {
-//            BlockPos mobPos = this.mob.blockPosition();
-//            Level level = this.mob.level();
-//            Vec3 mobVec = Vec3.atCenterOf(mobPos);
-//            Vec3 playerVec = Vec3.atCenterOf(currentTarget.blockPosition());
-//            // opposite direction of player
-//            Vec3 oppositeDir = (playerVec.subtract(mobVec).normalize()).scale(-1);
-//            // directional offsets from player
-//            int xOffset = (int) (Math.signum(oppositeDir.x) * 16);
-//            int zOffset = (int) (Math.signum(oppositeDir.z) * 16);
-//
-//            BlockPos bestPos = null;
-//            double bestDistance = Double.MAX_VALUE;
-//
-//            for(BlockPos pos : BlockPos.betweenClosed(
-//                    mobPos.offset(xOffset-8, -4, zOffset-8),
-//                    mobPos.offset(xOffset+8, 4, zOffset+8)))
-//            {
-//                boolean validHidingSpot = true;
-//
-//                // check clearance for mob height
-//                for(int i=0; i<4; i++)
-//                {
-//                    BlockState aboveState = level.getBlockState(pos.above(i));
-//                    if(!aboveState.isSolidRender(level, pos.above(i)))
-//                    {
-//                        validHidingSpot = false;
-//                        break;
-//                    }
-//                }
-//
-//                if(!validHidingSpot)
-//                    continue;
-//
-//
-//                Path path = this.mob.getNavigation().createPath(pos, 0);
-//                if(path != null && path.canReach())
-//                {
-//                    Vec3 blockVec = Vec3.atCenterOf(pos);
-//                    Vec3 directionToBlock = blockVec.subtract(mobVec).normalize();
-//                    // check if in opposite direction
-//                    double dotProd = directionToBlock.dot(oppositeDir);
-//                    if(dotProd > 0.5)
-//                    {
-//                        double distance = pos.distSqr(mobPos);
-//                        if(distance < bestDistance)
-//                        {
-//                            bestDistance = distance;
-//                            bestPos = pos;
-//                        }
-//                    }
-//                }
-//            }
-//            return bestPos;
-//        }
-//    }
+        public JohnChaseGoal(Mob pMob) {
+            super(pMob, LivingEntity.class, 10, false, false, null);
+            john = (JohnEntity) pMob;
+        }
+
+        @Override
+        public boolean canUse()
+        {
+            // checks entities in range
+            if(currentTarget == null && !flag)
+            {
+                LivingEntity possibleTarget = this.mob.level().getNearestPlayer(this.mob, 48.0D);
+                if(possibleTarget instanceof Player player)
+                {
+                    if(!player.isCreative() && !player.isSpectator() && player.isAlive())
+                    {
+                        john.hasTarget = true;
+                        currentTarget = player;
+                        flag = true;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+        // keeps chasing
+        @Override
+        public boolean canContinueToUse()
+        {
+            if(currentTarget instanceof Player player && flag)
+            {
+                if(!player.isCreative() && !player.isSpectator() && player.isAlive())
+                    return currentTarget != null && currentTarget.isAlive();
+            }
+            return false;
+        }
+        // sets current target on goal use
+        @Override
+        public void start()
+        {
+            super.start();
+            if(currentTarget != null)
+                this.mob.setTarget(currentTarget);
+        }
+        // clears current target
+        @Override
+        public void stop()
+        {
+            super.stop();
+            this.mob.setTarget(null);
+            john.hasTarget = false;
+            currentTarget = null;
+            flag = false;
+        }
+        // updates nav every tick to keep chasing
+        @Override
+        public void tick()
+        {
+            if(currentTarget != null)
+            {
+                Player chasedPlayer = this.mob.level().getNearestPlayer(mob, 32);
+                if(!currentTarget.hasLineOfSight(this.mob) && chasedPlayer != null) { // player still close
+                    //System.out.println("Run fast");
+                    this.mob.getNavigation().moveTo(
+                            currentTarget.getX(),
+                            currentTarget.getY(),
+                            currentTarget.getZ(),
+                            1.25D);
+                }
+                else if(!currentTarget.hasLineOfSight(this.mob) && chasedPlayer == null) { // player gets far away
+                    //System.out.println("Player far");
+                    this.mob.getNavigation().moveTo(
+                            currentTarget.getX(),
+                            currentTarget.getY(),
+                            currentTarget.getZ(),
+                            0.51111111111111111111111111111111111111111111111111111111111111111111111111111D);
+                }
+                else { // normal
+                    this.mob.getNavigation().moveTo(
+                            currentTarget.getX(),
+                            currentTarget.getY(),
+                            currentTarget.getZ(),
+                            1.0D);
+                }
+            }
+        }
+    }
+
+    static class JohnReachTargetGoal extends Goal
+    {
+        private final JohnEntity john;
+        //private boolean shouldTeleport = false;
+        private static final int coolDownDuration = 100;
+
+        public JohnReachTargetGoal(Mob pMob)
+        {
+            john = (JohnEntity)pMob;
+        }
+
+        @Override
+        public boolean canUse()
+        {
+            return john.reachCooldown <= 0 && john.hasTarget && john.isStuck;
+        }
+
+        public boolean canContinueToUse() {
+            return !john.onGround();
+        }
+
+        @Override
+        public void start()
+        {
+            LivingEntity target = john.getTarget();
+            if(target != null) // Player close, jump up to player
+            {
+                if((john.distanceToSqr(
+                        target.getX(),
+                        target.getY(),
+                        target.getZ()) <= 37.59) && target.getY() > john.getY())
+                {
+                    // most stuff stripped from leap goal
+                    double jumpHeight = Math.sqrt(0.189D * (target.getY() - (john.getY() - 1.0)));
+
+                    Vec3 vec3 = john.getDeltaMovement();
+                    Vec3 vec31 = new Vec3(target.getX() - john.getX(), 0.0D, target.getZ() - john.getZ());
+                    if (vec31.lengthSqr() > 1.0E-7D) {
+                        vec31 = vec31.normalize().scale(0.4D).add(vec3.scale(0.2D));
+                    }
+                    this.john.setDeltaMovement(vec31.x, jumpHeight, vec31.z);
+                }
+            }
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void stop() {
+            john.reachCooldown = coolDownDuration;
+            super.stop();
+        }
+    }
 }
