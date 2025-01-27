@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -58,7 +58,14 @@ public class CommonEvents
         }
     }
 
-    // LivingEntityDamageEvent
-    //  go through entity.getArmorSlots and check for unbreakable tag then cancel the event
-    // LivingEntityUseItemEvent and do same thing for mainHandItem
+    @SubscribeEvent
+    public static void villagerRun(EntityJoinLevelEvent event)
+    {
+        Entity entity = event.getEntity();
+        if(entity instanceof Villager villager)
+        {
+            villager.goalSelector.addGoal(3, new AvoidEntityGoal<>(villager, JohnEntity.class, 16, 1.2f, 1.2f));
+        }
+    }
+
 }

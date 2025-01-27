@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -95,6 +96,7 @@ public class JohnEntity extends Monster
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.8f));
         this.targetSelector.addGoal(1, new MeleeAttackGoal(this, 1.0f, true));
         this.targetSelector.addGoal(2, new JohnChaseGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
     }
 

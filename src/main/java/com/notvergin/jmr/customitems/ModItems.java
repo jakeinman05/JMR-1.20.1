@@ -6,7 +6,6 @@ import com.notvergin.jmr.customitems.item.RefImmortalityGem;
 import com.notvergin.jmr.customitems.weapons.ImmortalBlade;
 import com.notvergin.jmr.entity.ModEntities;
 import com.notvergin.jmr.registries.ModToolTiers;
-import com.sun.jna.platform.unix.solaris.LibKstat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tiers;

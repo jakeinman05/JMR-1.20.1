@@ -1,6 +1,5 @@
 package com.notvergin.jmr;
 
-import com.mojang.logging.LogUtils;
 import com.notvergin.jmr.entity.client.JohnModel;
 import com.notvergin.jmr.entity.client.ModModelLayers;
 import com.notvergin.jmr.mobeffects.RegisterBrewingRecipe;
@@ -10,14 +9,11 @@ import com.notvergin.jmr.entity.client.RenderJohn;
 import com.notvergin.jmr.mobeffects.ModMobEffects;
 import com.notvergin.jmr.customitems.ModItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,8 +21,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import org.slf4j.Logger;
 
 @Mod(JohnModResurrected.MODID)
 public class JohnModResurrected
