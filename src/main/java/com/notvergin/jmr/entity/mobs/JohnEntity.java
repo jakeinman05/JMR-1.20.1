@@ -88,15 +88,13 @@ public class JohnEntity extends Monster
 
     protected void registerGoals()
     {
-        // add runaway goal (regen health as well)
-        // maybe also rage goal (more damage speed and maybe sound)
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(3, new JohnReachTargetGoal(this));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0f));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 32.0f));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.5f));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.8f));
         this.targetSelector.addGoal(1, new MeleeAttackGoal(this, 1.0f, true));
-        this.targetSelector.addGoal(2, new JohnChaseGoal(this).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(2, new JohnChaseGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
     }
 
