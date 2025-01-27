@@ -15,5 +15,9 @@
   "item.minecraft.potion.effect.immortal_potion": "Potion of Immortality",
   "item.minecraft.splash_potion.effect.immortal_potion": "Splash Potion of Immortality",
   "item.minecraft.lingering_potion.effect.immortal_potion": "Lingering Potion of Immortality",
-  "item.minecraft.tipped_arrow.effect.immortal_potion": "Arrow of Immortality"
+  "item.minecraft.tipped_arrow.effect.immortal_potion": "Arrow of Immortality",
+
+  "sounds.jmresurrected.john_ambient": "John Screech",
+  "sounds.jmresurrected.john_hurt": "John Hurt",
+  "sounds.jmresurrected.john_death": "John Death"
 }

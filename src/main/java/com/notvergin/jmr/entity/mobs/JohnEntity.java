@@ -1,6 +1,7 @@
 package com.notvergin.jmr.entity.mobs;
 
 import com.notvergin.jmr.customitems.weapons.ImmortalBlade;
+import com.notvergin.jmr.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -234,17 +235,17 @@ public class JohnEntity extends Monster
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return SoundEvents.WARDEN_AMBIENT;
+        return ModSounds.JOHN_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.WARDEN_HURT;
+        return ModSounds.JOHN_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.HORSE_DEATH;
+        return ModSounds.JOHN_DEATH.get();
     }
 
     @Override
@@ -373,7 +374,6 @@ public class JohnEntity extends Monster
     {
         private final JohnEntity john;
         private static final int coolDownDuration = 40;
-        private boolean teleported;
 
         public JohnReachTargetGoal(Mob pMob)
         {
@@ -396,13 +396,11 @@ public class JohnEntity extends Monster
             LivingEntity target = john.getTarget();
             if(target != null) // Player close, jump up to player
             {
-                System.out.println("Goal attempt");
                 if((john.distanceToSqr(
                         target.getX(),
                         target.getY(),
                         target.getZ()) <= 50.59) && target.getY() > john.getY())
                 {
-                    System.out.println("Jump attempt");
                     // most stuff stripped from leap goal
                     double jumpHeight = Math.sqrt(0.189D * (target.getY() - (john.getY() - 1.0)));
 
@@ -416,9 +414,8 @@ public class JohnEntity extends Monster
                 else if(john.distanceToSqr(
                         target.getX(),
                         target.getY(),
-                        target.getZ()) >= 128.59)
+                        target.getZ()) >= 256.59)
                 {
-                    System.out.println("Teleport attempt");
                     double xOff = (john.getRandom().nextDouble() - 0.5) * 100;
                     double zOff = (john.getRandom().nextDouble() - 0.5) * 100;
 
@@ -427,17 +424,12 @@ public class JohnEntity extends Monster
 
                     BlockPos teleportPos = john.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos((int) xTeleport, (int) john.getY(), (int) zTeleport));
 
-                    boolean teleported = john.randomTeleport(
+                    john.randomTeleport(
                             teleportPos.getX() + 0.5,
                             teleportPos.getY(),
                             teleportPos.getZ() + 0.5,
                             true);
-
-                    if (teleported) {
-                        System.out.println("teleported");
-                    }
                 }
-                else System.out.println("pooped");
             }
         }
 
