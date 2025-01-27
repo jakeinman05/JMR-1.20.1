@@ -2,6 +2,7 @@ package com.notvergin.jmr.entity.mobs;
 
 import com.notvergin.jmr.customitems.weapons.ImmortalBlade;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,7 +82,7 @@ public class JohnEntity extends Monster
     {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 64.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.38D)
+                .add(Attributes.MOVEMENT_SPEED, 0.41D)
                 .add(Attributes.ARMOR, 8.0D)
                 .add(Attributes.ATTACK_DAMAGE, 9.5D)
                 .add(Attributes.MAX_HEALTH, 70.0D)
@@ -131,7 +133,11 @@ public class JohnEntity extends Monster
             else stuckTime = 0;
 
             if(stuckTime > 60)
+            {
                 isStuck = true;
+                System.out.println("John stuck");
+            }
+
 
             else isStuck = false;
         }
@@ -184,6 +190,19 @@ public class JohnEntity extends Monster
     {
         if (pLevel instanceof ServerLevel sLevel)
         {
+            long gameTime = sLevel.getGameTime();
+            long daysPassed = gameTime / 24000L;
+            System.out.println("Days passed: " + gameTime);
+            if(daysPassed < 4) return false;
+
+            BlockPos worldSpawn = new BlockPos(
+                    sLevel.getLevelData().getXSpawn(),
+                    sLevel.getLevelData().getYSpawn(),
+                    sLevel.getLevelData().getZSpawn());
+            double distFromSpawn = Math.sqrt(sPosition.distSqr(worldSpawn));
+            System.out.println("distFromSpawn = " + distFromSpawn);
+            if(distFromSpawn < 1000.0D) return false;
+
             DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
             float localDifficulty = difficulty.getEffectiveDifficulty();
 
@@ -198,6 +217,7 @@ public class JohnEntity extends Monster
                 spawnChance *= 1.5;  // increase spawn chance during rain or thunder
             }
 
+            System.out.println("Spawn chance: " + spawnChance);
             return random.nextDouble() < spawnChance;
         }
         return false;
@@ -321,7 +341,7 @@ public class JohnEntity extends Monster
         {
             if(currentTarget != null)
             {
-                Player chasedPlayer = this.mob.level().getNearestPlayer(mob, 32);
+                Player chasedPlayer = this.mob.level().getNearestPlayer(mob, 48.0D);
                 if(!currentTarget.hasLineOfSight(this.mob) && chasedPlayer != null) { // player still close
                     //System.out.println("Run fast");
                     this.mob.getNavigation().moveTo(
@@ -352,8 +372,8 @@ public class JohnEntity extends Monster
     static class JohnReachTargetGoal extends Goal
     {
         private final JohnEntity john;
-        //private boolean shouldTeleport = false;
-        private static final int coolDownDuration = 100;
+        private static final int coolDownDuration = 40;
+        private boolean teleported;
 
         public JohnReachTargetGoal(Mob pMob)
         {
@@ -376,11 +396,13 @@ public class JohnEntity extends Monster
             LivingEntity target = john.getTarget();
             if(target != null) // Player close, jump up to player
             {
+                System.out.println("Goal attempt");
                 if((john.distanceToSqr(
                         target.getX(),
                         target.getY(),
-                        target.getZ()) <= 37.59) && target.getY() > john.getY())
+                        target.getZ()) <= 50.59) && target.getY() > john.getY())
                 {
+                    System.out.println("Jump attempt");
                     // most stuff stripped from leap goal
                     double jumpHeight = Math.sqrt(0.189D * (target.getY() - (john.getY() - 1.0)));
 
@@ -389,10 +411,36 @@ public class JohnEntity extends Monster
                     if (vec31.lengthSqr() > 1.0E-7D) {
                         vec31 = vec31.normalize().scale(0.4D).add(vec3.scale(0.2D));
                     }
-                    this.john.setDeltaMovement(vec31.x, jumpHeight, vec31.z);
+                    john.setDeltaMovement(vec31.x, jumpHeight, vec31.z);
                 }
+                else if(john.distanceToSqr(
+                        target.getX(),
+                        target.getY(),
+                        target.getZ()) >= 128.59)
+                {
+                    System.out.println("Teleport attempt");
+                    double xOff = (john.getRandom().nextDouble() - 0.5) * 100;
+                    double zOff = (john.getRandom().nextDouble() - 0.5) * 100;
+
+                    double xTeleport = john.getX() + xOff;
+                    double zTeleport = john.getZ() + zOff;
+
+                    BlockPos teleportPos = john.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos((int) xTeleport, (int) john.getY(), (int) zTeleport));
+
+                    boolean teleported = john.randomTeleport(
+                            teleportPos.getX() + 0.5,
+                            teleportPos.getY(),
+                            teleportPos.getZ() + 0.5,
+                            true);
+
+                    if (teleported) {
+                        System.out.println("teleported");
+                    }
+                }
+                else System.out.println("pooped");
             }
         }
+
 
         @Override
         public boolean requiresUpdateEveryTick() {
