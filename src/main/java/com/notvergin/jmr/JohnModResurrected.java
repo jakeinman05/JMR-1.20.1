@@ -8,6 +8,7 @@ import com.notvergin.jmr.entity.ModEntities;
 import com.notvergin.jmr.entity.client.RenderJohn;
 import com.notvergin.jmr.mobeffects.ModMobEffects;
 import com.notvergin.jmr.customitems.ModItems;
+import com.notvergin.jmr.sound.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
@@ -36,6 +37,7 @@ public class JohnModResurrected
         ModEntities.register(modEventBus);
         ModMobEffects.register(modEventBus);
         ModPotions.register(modEventBus);
+        ModSounds.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
