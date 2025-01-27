@@ -23,6 +23,7 @@ public class ModItemModelProvider extends ItemModelProvider
         buildItem(ModItems.JOHN_TEAR);
         buildItem(ModItems.IMMORTALITY_SHARD);
         buildItem(ModItems.IMMORTAL_HUSK);
+        buildItem(ModItems.REFINED_IMMORTAL_GEM);
 
         buildHandheldItem(ModItems.IMMORTALITY_SWORD);
         buildHandheldItem(ModItems.UIMMORTALITY_SWORD);

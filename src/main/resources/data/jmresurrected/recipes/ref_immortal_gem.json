@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XOX"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "O": {
+      "item": "jmresurrected:immortality_gem"
+    }
+  },
+  "result": {
+    "item": "jmresurrected:ref_immortal_gem",
+    "count": 1
+  }
+}
