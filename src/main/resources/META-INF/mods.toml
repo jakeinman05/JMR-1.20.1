@@ -6,9 +6,9 @@ license="MIT" # Replace with your mod's license, such as "All Rights Reserved" o
 modId="jmresurrected" # This must match the MODID in your Java class
 version="1.7.0" # Replace with your mod's version
 displayName="John Mod Resurrected" # Name of your mod
-authors="Your Name" # Replace with your name or team name
+authors="notvergin" # Replace with your name or team name
 description='''
-A mod that adds custom items and gameplay features.
+A mod that has been long forgotten. \nNow brought back to Minecraft.\nUPDATED!!!!!!!
 ''' # Write a brief description of your mod
 
 [[dependencies.jmresurrected]]
