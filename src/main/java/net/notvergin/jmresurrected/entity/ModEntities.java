@@ -18,6 +18,7 @@ public class ModEntities
     public static final RegistryObject<EntityType<JohnEntity>> JOHN =
             ENTITY_TYPES.register("john", () -> EntityType.Builder.of(JohnEntity::new, MobCategory.MONSTER)
                     .sized(0.8F, 4.0F)
+                    .setTrackingRange(10)
                     .build("john"));
 
     public static void register(IEventBus eventBus)
