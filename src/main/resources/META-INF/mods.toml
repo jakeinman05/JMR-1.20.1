@@ -14,7 +14,7 @@ A mod that has been long forgotten. \nNow brought back to Minecraft.\nUPDATED!!!
 [[dependencies.jmresurrected]]
 modId="forge"
 mandatory=true
-versionRange="[47,)"
+versionRange="[47.3.22,)"
 ordering="NONE"
 side="BOTH"
 
