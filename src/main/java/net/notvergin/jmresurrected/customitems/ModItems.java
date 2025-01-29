@@ -42,7 +42,7 @@ public class ModItems
 
     //Spawn Eggs
     public static final RegistryObject<Item> JOHN_EGG = ITEMS.register("john_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.JOHN, 0xc9bebd, 0x058632, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntities.JOHN, 16777203, 9240576, new Item.Properties()));
 
     public static void register(IEventBus bus)
     {
