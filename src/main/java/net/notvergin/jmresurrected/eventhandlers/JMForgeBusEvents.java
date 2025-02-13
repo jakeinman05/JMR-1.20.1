@@ -1,6 +1,6 @@
 package net.notvergin.jmresurrected.eventhandlers;
 
-import net.notvergin.jmresurrected.customitems.ModItems;
+import net.notvergin.jmresurrected.customitems.JMModItems;
 import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ForgeBusEvents
+public class JMForgeBusEvents
 {
     @SubscribeEvent
     public static void onRefGemUse(PlayerInteractEvent.RightClickItem event)
@@ -30,13 +30,13 @@ public class ForgeBusEvents
             ItemStack mainHand = player.getMainHandItem();
             ItemStack offHand = player.getOffhandItem();
 
-            if(offHand.getItem() == ModItems.REFINED_IMMORTAL_GEM.get() && !mainHand.isEmpty())
+            if(offHand.getItem() == JMModItems.REFINED_IMMORTAL_GEM.get() && !mainHand.isEmpty())
             {
-                if(mainHand.getItem() == ModItems.IMMORTALITY_SWORD.get())
+                if(mainHand.getItem() == JMModItems.IMMORTALITY_SWORD.get())
                 {
                     doHandEffects(player);
                     mainHand.shrink(1);
-                    player.setItemInHand(InteractionHand.MAIN_HAND, ModItems.UIMMORTALITY_SWORD.get().getDefaultInstance());
+                    player.setItemInHand(InteractionHand.MAIN_HAND, JMModItems.UIMMORTALITY_SWORD.get().getDefaultInstance());
                     event.setCanceled(true);
                     return;
                 }

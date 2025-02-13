@@ -4,8 +4,8 @@ import net.notvergin.jmresurrected.customitems.item.ImmortalGem;
 import net.notvergin.jmresurrected.customitems.item.ImmortalHusk;
 import net.notvergin.jmresurrected.customitems.item.RefImmortalityGem;
 import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
-import net.notvergin.jmresurrected.entity.registryhandlers.ModEntities;
-import net.notvergin.jmresurrected.registries.ModToolTiers;
+import net.notvergin.jmresurrected.entity.registryhandlers.JMEntites;
+import net.notvergin.jmresurrected.registries.JMToolTiers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tiers;
@@ -17,7 +17,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
-public class ModItems
+public class JMModItems
 {
     // Creates a deferred register for new items, based off forge registries
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
@@ -38,13 +38,13 @@ public class ModItems
     public static final RegistryObject<Item> IMMORTALITY_SWORD = ITEMS.register("immortality_sword",
             () -> new ImmortalBlade(Tiers.NETHERITE, 3, -2.4F, new Item.Properties().rarity(Rarity.RARE).fireResistant()));
     public static final RegistryObject<Item> UIMMORTALITY_SWORD = ITEMS.register("uimmortality_sword",
-            () -> new ImmortalBlade(ModToolTiers.IMMORTAL, 10, -2.4F, new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
+            () -> new ImmortalBlade(JMToolTiers.IMMORTAL, 10, -2.4F, new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
 
     //Spawn Eggs
     public static final RegistryObject<Item> JOHN_EGG = ITEMS.register("john_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.JOHN, 16777203, 9240576, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(JMEntites.JOHN, 16777203, 9240576, new Item.Properties()));
     public static final RegistryObject<Item> BABY_JOHN_EGG = ITEMS.register("babyjohn_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.BABYJOHN, 16777203, 9240576, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(JMEntites.BABYJOHN, 16777203, 9240576, new Item.Properties()));
 
     public static void register(IEventBus bus)
     {

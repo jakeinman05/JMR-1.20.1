@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class DataGenerators
+public class JMDataGenerators
 {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event)
@@ -24,6 +24,6 @@ public class DataGenerators
         // need this for other things
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
-        gen.addProvider(event.includeClient(), new ModItemModelProvider(packOut, existingFileHelper));
+        gen.addProvider(event.includeClient(), new JMItemModelProvider(packOut, existingFileHelper));
     }
 }

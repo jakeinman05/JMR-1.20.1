@@ -10,7 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
-public class ModMobEffects
+public class JMMobEffects
 {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS =
             DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, MODID);

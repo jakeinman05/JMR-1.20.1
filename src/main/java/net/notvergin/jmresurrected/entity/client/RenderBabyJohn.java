@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.notvergin.jmresurrected.entity.mobs.BabyJohnEntity;
-import net.notvergin.jmresurrected.entity.models.ModModelLayers;
+import net.notvergin.jmresurrected.entity.models.JMModelLayers;
 import net.notvergin.jmresurrected.entity.models.entity.BabyJohnModel;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ public class RenderBabyJohn extends MobRenderer<BabyJohnEntity, BabyJohnModel<Ba
     private static final ResourceLocation NORMAL = new ResourceLocation(MODID, "textures/entity/babyjohn.png");
 
     public RenderBabyJohn(EntityRendererProvider.Context pContext) {
-        super(pContext, new BabyJohnModel<>(pContext.bakeLayer(ModModelLayers.BABY_JOHN_LAYER)), 0.2F);
+        super(pContext, new BabyJohnModel<>(pContext.bakeLayer(JMModelLayers.BABY_JOHN_LAYER)), 0.2F);
         this.addLayer(new EyesLayer<>(this)
         {
             @Override

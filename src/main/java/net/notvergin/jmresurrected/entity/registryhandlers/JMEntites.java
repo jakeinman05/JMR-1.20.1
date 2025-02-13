@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
-public class ModEntities
+public class JMEntites
 {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);

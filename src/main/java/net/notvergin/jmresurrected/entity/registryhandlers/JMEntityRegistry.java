@@ -12,23 +12,23 @@ import net.notvergin.jmresurrected.entity.mobs.JohnEntity;
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModEntityRegistry
+public class JMEntityRegistry
 {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
-        event.put(ModEntities.JOHN.get(), JohnEntity.createAttributes().build());
-        event.put(ModEntities.BABYJOHN.get(), BabyJohnEntity.createAttributes());
+        event.put(JMEntites.JOHN.get(), JohnEntity.createAttributes().build());
+        event.put(JMEntites.BABYJOHN.get(), BabyJohnEntity.createAttributes());
     }
 
     @SubscribeEvent
     public static void registerEntitySpawns(SpawnPlacementRegisterEvent event)
     {
-        event.register(ModEntities.JOHN.get(),
+        event.register(JMEntites.JOHN.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 JohnEntity::canSpawn,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
-        event.register(ModEntities.BABYJOHN.get(),
+        event.register(JMEntites.BABYJOHN.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 BabyJohnEntity::canSpawn,

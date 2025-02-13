@@ -10,7 +10,7 @@ import java.util.List;
 
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
-public class ModToolTiers
+public class JMToolTiers
 {
     // how to make a tier
     public static final Tier IMMORTAL = TierSortingRegistry.registerTier(

@@ -9,7 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
-public class ModSounds
+public class JMSounds
 {
     public static final DeferredRegister<SoundEvent> SOUNDS =
             DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);

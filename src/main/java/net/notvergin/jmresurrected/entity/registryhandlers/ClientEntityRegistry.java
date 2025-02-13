@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.notvergin.jmresurrected.entity.client.RenderBabyJohn;
 import net.notvergin.jmresurrected.entity.client.RenderJohn;
-import net.notvergin.jmresurrected.entity.models.ModModelLayers;
+import net.notvergin.jmresurrected.entity.models.JMModelLayers;
 import net.notvergin.jmresurrected.entity.models.entity.BabyJohnModel;
 import net.notvergin.jmresurrected.entity.models.entity.JohnModel;
 
@@ -19,13 +19,13 @@ public class ClientEntityRegistry
 {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        EntityRenderers.register(ModEntities.JOHN.get(), RenderJohn::new);
-        EntityRenderers.register(ModEntities.BABYJOHN.get(), RenderBabyJohn::new);
+        EntityRenderers.register(JMEntites.JOHN.get(), RenderJohn::new);
+        EntityRenderers.register(JMEntites.BABYJOHN.get(), RenderBabyJohn::new);
     }
 
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(ModModelLayers.JOHN_LAYER, JohnModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.BABY_JOHN_LAYER, BabyJohnModel::createBodyLayer);
+        event.registerLayerDefinition(JMModelLayers.JOHN_LAYER, JohnModel::createBodyLayer);
+        event.registerLayerDefinition(JMModelLayers.BABY_JOHN_LAYER, BabyJohnModel::createBodyLayer);
     }
 }

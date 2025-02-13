@@ -1,11 +1,11 @@
 package net.notvergin.jmresurrected;
 
 import net.notvergin.jmresurrected.mobeffects.RegisterBrewingRecipe;
-import net.notvergin.jmresurrected.mobeffects.potions.ModPotions;
-import net.notvergin.jmresurrected.entity.registryhandlers.ModEntities;
-import net.notvergin.jmresurrected.mobeffects.ModMobEffects;
-import net.notvergin.jmresurrected.customitems.ModItems;
-import net.notvergin.jmresurrected.sound.ModSounds;
+import net.notvergin.jmresurrected.mobeffects.potions.JMPotionRegistry;
+import net.notvergin.jmresurrected.entity.registryhandlers.JMEntites;
+import net.notvergin.jmresurrected.mobeffects.JMMobEffects;
+import net.notvergin.jmresurrected.customitems.JMModItems;
+import net.notvergin.jmresurrected.sound.JMSounds;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,11 +27,11 @@ public class JohnModResurrected
     {
         IEventBus modEventBus = context.getModEventBus();
 
-        ModEntities.register(modEventBus);
-        ModItems.register(modEventBus);
-        ModMobEffects.register(modEventBus);
-        ModPotions.register(modEventBus);
-        ModSounds.register(modEventBus);
+        JMEntites.register(modEventBus);
+        JMModItems.register(modEventBus);
+        JMMobEffects.register(modEventBus);
+        JMPotionRegistry.register(modEventBus);
+        JMSounds.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         // Register ourselves for server and other game events we are interested in
@@ -48,21 +48,21 @@ public class JohnModResurrected
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(ModItems.JOHN_TEAR);
-            event.accept(ModItems.IMMORTALITY_GEM);
-            event.accept(ModItems.IMMORTALITY_SHARD);
-            event.accept(ModItems.IMMORTAL_HUSK);
+            event.accept(JMModItems.JOHN_TEAR);
+            event.accept(JMModItems.IMMORTALITY_GEM);
+            event.accept(JMModItems.IMMORTALITY_SHARD);
+            event.accept(JMModItems.IMMORTAL_HUSK);
         }
         if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(ModItems.REFINED_IMMORTAL_GEM);
+            event.accept(JMModItems.REFINED_IMMORTAL_GEM);
         }
         if(event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-            event.accept(ModItems.JOHN_EGG);
-            event.accept(ModItems.BABY_JOHN_EGG);
+            event.accept(JMModItems.JOHN_EGG);
+            event.accept(JMModItems.BABY_JOHN_EGG);
         }
         if(event.getTabKey() == CreativeModeTabs.COMBAT) {
-            event.accept(ModItems.IMMORTALITY_SWORD);
-            event.accept(ModItems.UIMMORTALITY_SWORD);
+            event.accept(JMModItems.IMMORTALITY_SWORD);
+            event.accept(JMModItems.UIMMORTALITY_SWORD);
         }
     }
 

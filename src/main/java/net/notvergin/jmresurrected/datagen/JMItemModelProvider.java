@@ -1,6 +1,6 @@
 package net.notvergin.jmresurrected.datagen;
 
-import net.notvergin.jmresurrected.customitems.ModItems;
+import net.notvergin.jmresurrected.customitems.JMModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -11,25 +11,25 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
-public class ModItemModelProvider extends ItemModelProvider
+public class JMItemModelProvider extends ItemModelProvider
 {
-    public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+    public JMItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, MODID, existingFileHelper);
     }
 
     @Override
     protected void registerModels() {
-        buildItem(ModItems.IMMORTALITY_GEM);
-        buildItem(ModItems.JOHN_TEAR);
-        buildItem(ModItems.IMMORTALITY_SHARD);
-        buildItem(ModItems.IMMORTAL_HUSK);
-        buildItem(ModItems.REFINED_IMMORTAL_GEM);
+        buildItem(JMModItems.IMMORTALITY_GEM);
+        buildItem(JMModItems.JOHN_TEAR);
+        buildItem(JMModItems.IMMORTALITY_SHARD);
+        buildItem(JMModItems.IMMORTAL_HUSK);
+        buildItem(JMModItems.REFINED_IMMORTAL_GEM);
 
-        buildHandheldItem(ModItems.IMMORTALITY_SWORD);
-        buildHandheldItem(ModItems.UIMMORTALITY_SWORD);
+        buildHandheldItem(JMModItems.IMMORTALITY_SWORD);
+        buildHandheldItem(JMModItems.UIMMORTALITY_SWORD);
 
-        withExistingParent(ModItems.JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
-        withExistingParent(ModItems.BABY_JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(JMModItems.JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(JMModItems.BABY_JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
     }
 
     private ItemModelBuilder buildItem(RegistryObject<Item> item)

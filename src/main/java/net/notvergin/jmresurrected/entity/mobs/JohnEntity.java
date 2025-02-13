@@ -1,7 +1,7 @@
 package net.notvergin.jmresurrected.entity.mobs;
 
 import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
-import net.notvergin.jmresurrected.sound.ModSounds;
+import net.notvergin.jmresurrected.sound.JMSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -230,17 +230,17 @@ public class JohnEntity extends Monster
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return ModSounds.JOHN_AMBIENT.get();
+        return JMSounds.JOHN_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return ModSounds.JOHN_HURT.get();
+        return JMSounds.JOHN_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return ModSounds.JOHN_DEATH.get();
+        return JMSounds.JOHN_DEATH.get();
     }
 
     @Override

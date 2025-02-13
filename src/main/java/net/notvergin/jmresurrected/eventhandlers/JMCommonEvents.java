@@ -2,7 +2,7 @@ package net.notvergin.jmresurrected.eventhandlers;
 
 import net.notvergin.jmresurrected.entity.mobs.BabyJohnEntity;
 import net.notvergin.jmresurrected.entity.mobs.JohnEntity;
-import net.notvergin.jmresurrected.mobeffects.ModMobEffects;
+import net.notvergin.jmresurrected.mobeffects.JMMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,7 +17,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
-public class CommonEvents
+public class JMCommonEvents
 {
     @SubscribeEvent
     public static void onImmortalEffect(LivingHurtEvent event)
@@ -25,7 +25,7 @@ public class CommonEvents
         Entity mob = event.getEntity();
         if(mob instanceof LivingEntity entity)
         {
-            if(entity.hasEffect(ModMobEffects.IMMORTAL_EFFECT.get()))
+            if(entity.hasEffect(JMMobEffects.IMMORTAL_EFFECT.get()))
             {
                 event.setCanceled(true);
 
@@ -53,7 +53,7 @@ public class CommonEvents
             {
                 event.setCanceled(true);
                 // add sound to signify as well?
-                MobEffectInstance johnImmortal = new MobEffectInstance(ModMobEffects.IMMORTAL_EFFECT.get(), 100);
+                MobEffectInstance johnImmortal = new MobEffectInstance(JMMobEffects.IMMORTAL_EFFECT.get(), 100);
                 john.addEffect(johnImmortal);
             }
         }
