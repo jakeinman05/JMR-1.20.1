@@ -9,7 +9,9 @@
   "item.jmresurrected.uimmortality_sword": "Immortal Blade",
 
   "entity.jmresurrected.john": "John",
+  "entity.jmresurrected.babyjohn": "Baby John",
   "item.jmresurrected.john_spawn_egg": "John Spawn Egg",
+  "item.jmresurrected.babyjohn_spawn_egg": "Baby John Spawn Egg",
 
   "effect.jmresurrected.immortal": "Immortality",
   "item.minecraft.potion.effect.immortal_potion": "Potion of Immortality",

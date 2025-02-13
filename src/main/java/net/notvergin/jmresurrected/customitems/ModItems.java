@@ -4,7 +4,7 @@ import net.notvergin.jmresurrected.customitems.item.ImmortalGem;
 import net.notvergin.jmresurrected.customitems.item.ImmortalHusk;
 import net.notvergin.jmresurrected.customitems.item.RefImmortalityGem;
 import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
-import net.notvergin.jmresurrected.entity.ModEntities;
+import net.notvergin.jmresurrected.entity.registryhandlers.ModEntities;
 import net.notvergin.jmresurrected.registries.ModToolTiers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -43,6 +43,8 @@ public class ModItems
     //Spawn Eggs
     public static final RegistryObject<Item> JOHN_EGG = ITEMS.register("john_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.JOHN, 16777203, 9240576, new Item.Properties()));
+    public static final RegistryObject<Item> BABY_JOHN_EGG = ITEMS.register("babyjohn_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.BABYJOHN, 16777203, 9240576, new Item.Properties()));
 
     public static void register(IEventBus bus)
     {

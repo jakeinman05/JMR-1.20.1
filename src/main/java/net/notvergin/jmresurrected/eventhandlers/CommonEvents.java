@@ -1,5 +1,6 @@
 package net.notvergin.jmresurrected.eventhandlers;
 
+import net.notvergin.jmresurrected.entity.mobs.BabyJohnEntity;
 import net.notvergin.jmresurrected.entity.mobs.JohnEntity;
 import net.notvergin.jmresurrected.mobeffects.ModMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -64,7 +65,8 @@ public class CommonEvents
         Entity entity = event.getEntity();
         if(entity instanceof Villager villager)
         {
-            villager.goalSelector.addGoal(3, new AvoidEntityGoal<>(villager, JohnEntity.class, 16, 1.2f, 1.2f));
+            villager.goalSelector.addGoal(3, new AvoidEntityGoal<>(villager, JohnEntity.class, 16, 1.0f, 1.0f));
+            villager.goalSelector.addGoal(3, new AvoidEntityGoal<>(villager, BabyJohnEntity.class, 16, 1.0f, 1.0f));
         }
     }
 

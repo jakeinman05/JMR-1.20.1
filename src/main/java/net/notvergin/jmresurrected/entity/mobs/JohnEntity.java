@@ -134,7 +134,7 @@ public class JohnEntity extends Monster
             if(stuckTime > 60)
             {
                 isStuck = true;
-                System.out.println("John stuck");
+                //System.out.println("John stuck");
             }
 
 
@@ -157,7 +157,7 @@ public class JohnEntity extends Monster
             ItemStack handItem = player.getMainHandItem();
             if(handItem.getItem() instanceof ImmortalBlade)
             {
-                pAmount *= 2.0f;
+                pAmount *= 1.3f;
             }
 
         }
@@ -191,32 +191,29 @@ public class JohnEntity extends Monster
         {
             long gameTime = sLevel.getGameTime();
             long daysPassed = gameTime / 24000L;
-            System.out.println("Days passed: " + gameTime);
-            if(daysPassed < 4) return false;
+            if(daysPassed < 5) return false;
 
             BlockPos worldSpawn = new BlockPos(
                     sLevel.getLevelData().getXSpawn(),
                     sLevel.getLevelData().getYSpawn(),
                     sLevel.getLevelData().getZSpawn());
             double distFromSpawn = Math.sqrt(sPosition.distSqr(worldSpawn));
-            System.out.println("distFromSpawn = " + distFromSpawn);
             if(distFromSpawn < 1000.0D) return false;
 
             DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
             float localDifficulty = difficulty.getEffectiveDifficulty();
 
-            double k = 1.0d;  // slope factor
-            double x0 = 3.6d; // inflection point
+            double k = 3.0d;  // slope factor
+            double x0 = 3.9d; // inflection point
 
             // sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve
             double spawnChance = 1.0 / (1.0 + Math.exp(-k * (localDifficulty - x0)));
             spawnChance = Math.min(1.0, Math.max(0.0, spawnChance)); // clamps to 0-1 range
 
             if (sLevel.isRainingAt(sPosition) || sLevel.isThundering()) {
-                spawnChance *= 1.5;  // increase spawn chance during rain or thunder
+                spawnChance *= 1.2F;  // increase spawn chance during rain or thunder
             }
 
-            System.out.println("Spawn chance: " + spawnChance);
             return random.nextDouble() < spawnChance;
         }
         return false;
@@ -355,7 +352,7 @@ public class JohnEntity extends Monster
                             currentTarget.getX(),
                             currentTarget.getY(),
                             currentTarget.getZ(),
-                            0.51111111111111111111111111111111111111111111111111111111111111111111111111111D);
+                            0.61111111111111111111111111111111111111111111111111111111111111111111111111111D);
                 }
                 else { // normal
                     this.mob.getNavigation().moveTo(

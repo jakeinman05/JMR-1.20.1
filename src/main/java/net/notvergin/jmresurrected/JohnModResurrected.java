@@ -1,24 +1,18 @@
 package net.notvergin.jmresurrected;
 
-import net.notvergin.jmresurrected.entity.client.JohnModel;
-import net.notvergin.jmresurrected.entity.client.ModModelLayers;
 import net.notvergin.jmresurrected.mobeffects.RegisterBrewingRecipe;
 import net.notvergin.jmresurrected.mobeffects.potions.ModPotions;
-import net.notvergin.jmresurrected.entity.ModEntities;
-import net.notvergin.jmresurrected.entity.client.RenderJohn;
+import net.notvergin.jmresurrected.entity.registryhandlers.ModEntities;
 import net.notvergin.jmresurrected.mobeffects.ModMobEffects;
 import net.notvergin.jmresurrected.customitems.ModItems;
 import net.notvergin.jmresurrected.sound.ModSounds;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -64,6 +58,7 @@ public class JohnModResurrected
         }
         if(event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.JOHN_EGG);
+            event.accept(ModItems.BABY_JOHN_EGG);
         }
         if(event.getTabKey() == CreativeModeTabs.COMBAT) {
             event.accept(ModItems.IMMORTALITY_SWORD);
@@ -77,16 +72,5 @@ public class JohnModResurrected
     }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            EntityRenderers.register(ModEntities.JOHN.get(), RenderJohn::new);
-        }
-
-        @SubscribeEvent
-        public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-            event.registerLayerDefinition(ModModelLayers.JOHN_LAYER, JohnModel::createBodyLayer);
-        }
-    }
+    public static class ClientModEvents {}
 }

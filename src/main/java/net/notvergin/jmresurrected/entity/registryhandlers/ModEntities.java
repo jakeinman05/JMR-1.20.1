@@ -1,5 +1,6 @@
-package net.notvergin.jmresurrected.entity;
+package net.notvergin.jmresurrected.entity.registryhandlers;
 
+import net.notvergin.jmresurrected.entity.mobs.BabyJohnEntity;
 import net.notvergin.jmresurrected.entity.mobs.JohnEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -18,8 +19,13 @@ public class ModEntities
     public static final RegistryObject<EntityType<JohnEntity>> JOHN =
             ENTITY_TYPES.register("john", () -> EntityType.Builder.of(JohnEntity::new, MobCategory.MONSTER)
                     .sized(0.8F, 4.0F)
-                    .setTrackingRange(10)
+                    .setTrackingRange(12)
                     .build("john"));
+    public static final RegistryObject<EntityType<BabyJohnEntity>> BABYJOHN =
+            ENTITY_TYPES.register("babyjohn", () -> EntityType.Builder.of(BabyJohnEntity::new, MobCategory.MONSTER)
+                    .sized(0.5F, 1.0F)
+                    .setTrackingRange(12)
+                    .build("babyjohn"));
 
     public static void register(IEventBus eventBus)
     {

@@ -5,9 +5,8 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-public class ModAnimationDefinition
-{
-    public static final AnimationDefinition idle = AnimationDefinition.Builder.withLength(2.375F).looping()
+public class JohnAnimationDefinition {
+    public static final AnimationDefinition animation_idle = AnimationDefinition.Builder.withLength(2.375F).looping()
             .addAnimation("Larm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-0.7303F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
@@ -28,7 +27,7 @@ public class ModAnimationDefinition
             ))
             .build();
 
-    public static final AnimationDefinition walk = AnimationDefinition.Builder.withLength(0.5449F).looping()
+    public static final AnimationDefinition animation_walk = AnimationDefinition.Builder.withLength(0.5449F).looping()
             .addAnimation("Rarm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-32.8116F, 34.3034F, -382.1106F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.1603F, KeyframeAnimations.degreeVec(-42.4777F, -19.7204F, -443.4975F), AnimationChannel.Interpolations.CATMULLROM),

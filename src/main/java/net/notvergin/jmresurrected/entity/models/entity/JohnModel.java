@@ -1,15 +1,14 @@
-package net.notvergin.jmresurrected.entity.client;
+package net.notvergin.jmresurrected.entity.models.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.notvergin.jmresurrected.entity.animations.ModAnimationDefinition;
+import net.notvergin.jmresurrected.entity.animations.JohnAnimationDefinition;
 import net.notvergin.jmresurrected.entity.mobs.JohnEntity;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 
 public class JohnModel<T extends JohnEntity> extends HierarchicalModel<T> {
 	private final ModelPart john;
@@ -74,8 +73,8 @@ public class JohnModel<T extends JohnEntity> extends HierarchicalModel<T> {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.applyHeadRotation(pNetHeadYaw, pHeadPitch, pAgeInTicks);
 
-		this.animateWalk(ModAnimationDefinition.walk, pLimbSwing, pLimbSwingAmount, 1.5f, 1.5f);
-		this.animate(((JohnEntity)pEntity).idleAnimationState, ModAnimationDefinition.idle, pAgeInTicks, 1.0f);
+		this.animateWalk(JohnAnimationDefinition.animation_walk, pLimbSwing, pLimbSwingAmount, 1.5f, 1.5f);
+		this.animate(((JohnEntity)pEntity).idleAnimationState, JohnAnimationDefinition.animation_idle, pAgeInTicks, 1.0f);
 	}
 
 	private void applyHeadRotation(float netHeadYaw, float netHeadPitch, float ageInTicks)
