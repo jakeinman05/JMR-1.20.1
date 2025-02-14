@@ -16,5 +16,23 @@
     "sounds": [
       "jmresurrected:john_death"
     ]
+  },
+  "babyjohn_ambient": {
+    "subtitles": "sounds.jmresurrected.babyjohn_ambient",
+    "sounds": [
+      "jmresurrected:babyjohn_ambient"
+    ]
+  },
+  "babyjohn_hurt": {
+    "subtitles": "sounds.jmresurrected.babyjohn_hurt",
+    "sounds": [
+      "jmresurrected:babyjohn_hurt"
+    ]
+  },
+  "babyjohn_death": {
+    "subtitles": "sounds.jmresurrected.babyjohn_death",
+    "sounds": [
+      "jmresurrected:babyjohn_death"
+    ]
   }
 }

@@ -5,7 +5,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -35,11 +38,14 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
 import net.notvergin.jmresurrected.entity.registryhandlers.JMEntites;
+import net.notvergin.jmresurrected.sound.JMSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
+
+import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
 public class BabyJohnEntity extends Monster
 {
@@ -139,6 +145,7 @@ public class BabyJohnEntity extends Monster
 
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new BabyJohnMeleeGoal(this));
         this.goalSelector.addGoal(2, new BabyJohnFollowAlphaGoal(this, 2.0F));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0D));
@@ -249,7 +256,6 @@ public class BabyJohnEntity extends Monster
 
         if(this.fleeTimeoutTicks > 0) {
             --this.fleeTimeoutTicks;
-            System.out.println("Flee timeout: " + this.fleeTimeoutTicks);
         }
     }
 
@@ -324,18 +330,33 @@ public class BabyJohnEntity extends Monster
         this.entityData.set(SUMMONED_ALLIES, bool);
     }
 
+    @Override
+    protected @NotNull SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return JMSounds.BABYJOHN_HURT.get();
+    }
+
+    @Override
+    protected @NotNull SoundEvent getDeathSound() {
+        return JMSounds.BABYJOHN_HURT.get();
+    }
+
+    @Override
+    protected @NotNull ResourceLocation getDefaultLootTable() {
+        return new ResourceLocation(MODID, "entities/babyjohn");
+    }
+
     public static boolean canSpawn(EntityType<BabyJohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosition, RandomSource random) {
         if (pLevel instanceof ServerLevel sLevel) {
             long gameTime = sLevel.getGameTime();
             long daysPassed = gameTime / 24000L;
-            //if(daysPassed < 2) return false;
+            if(daysPassed < 3) return false;
 
             BlockPos worldSpawn = new BlockPos(
                     sLevel.getLevelData().getXSpawn(),
                     sLevel.getLevelData().getYSpawn(),
                     sLevel.getLevelData().getZSpawn());
             double distFromSpawn = Math.sqrt(sPosition.distSqr(worldSpawn));
-            //if(distFromSpawn < 500.0D) return false;
+            if(distFromSpawn < 500.0D) return false;
 
             DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
             float localDifficulty = difficulty.getEffectiveDifficulty();
@@ -409,7 +430,7 @@ public class BabyJohnEntity extends Monster
         @Override
         public void tick() {
             LivingEntity target = john.getTarget();
-            if(target != null && target.isAlive()) {
+            if(target != null && target.isAlive() && !this.john.level().isClientSide) {
                 john.lookControl.setLookAt(target);
                 int jumpChance = john.isAlpha() ? 15 : 25;
                 john.wantsToJump = john.getRandom().nextInt(jumpChance) == 0;
@@ -424,6 +445,7 @@ public class BabyJohnEntity extends Monster
                 else if (dist > 2.0F && dist < 7.0F && john.wantsToJump && !john.isLeaping())
                 {
                     john.setLeaping(true);
+                    this.john.level().playSound(null, this.john.getX(), this.john.getY(), this.john.getZ(), JMSounds.BABYJOHN_JUMP.get(), SoundSource.HOSTILE, 0.7F, this.john.random.nextFloat());
                     Vec3 johnVec = john.getDeltaMovement();
                     Vec3 targetVec = new Vec3(target.getX() - john.getX(), 0, target.getZ() - john.getZ());
                     if(targetVec.lengthSqr() > 1.0E-7D)

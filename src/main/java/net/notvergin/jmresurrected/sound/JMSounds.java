@@ -20,8 +20,12 @@ public class JMSounds
             registerSoundEvents("john_hurt");
     public static final RegistryObject<SoundEvent> JOHN_DEATH =
             registerSoundEvents("john_death");
-    public static final RegistryObject<SoundEvent> JOHN_EFFECT =
-            registerSoundEvents("john_effect");
+    public static final RegistryObject<SoundEvent> BABYJOHN_AMBIENT =
+            registerSoundEvents("babyjohn_ambient");
+    public static final RegistryObject<SoundEvent> BABYJOHN_HURT =
+            registerSoundEvents("babyjohn_hurt");
+    public static final RegistryObject<SoundEvent> BABYJOHN_JUMP =
+            registerSoundEvents("babyjohn_jump");
 
     private static RegistryObject<SoundEvent> registerSoundEvents(String name)
     {
