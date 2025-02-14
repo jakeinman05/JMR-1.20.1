@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
@@ -33,17 +34,20 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
+import net.notvergin.jmresurrected.entity.registryhandlers.JMEntites;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 
 public class BabyJohnEntity extends Monster
 {
     private static final EntityDataAccessor<Boolean> ALPHA = SynchedEntityData.defineId(BabyJohnEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LEAPING = SynchedEntityData.defineId(BabyJohnEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> FLEEING = SynchedEntityData.defineId(BabyJohnEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SUMMONED_ALLIES = SynchedEntityData.defineId(BabyJohnEntity.class, EntityDataSerializers.BOOLEAN);
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState jumpAnimationState = new AnimationState();
@@ -52,9 +56,9 @@ public class BabyJohnEntity extends Monster
     private boolean hasAlphaAttributes = false;
     private boolean hasAlpha = false;
     private BabyJohnEntity alpha = null;
+    private static double alphaSummonCount = 0;
 
     private boolean hasFleeingAttributes = false;
-
     private int fleeTicks = 0;
     private int fleeTimeoutTicks = 0;
     private boolean wantsToFlee = false;
@@ -73,6 +77,7 @@ public class BabyJohnEntity extends Monster
         this.entityData.define(ALPHA, false);
         this.entityData.define(LEAPING, false);
         this.entityData.define(FLEEING, false);
+        this.entityData.define(SUMMONED_ALLIES, false);
     }
 
 
@@ -83,7 +88,7 @@ public class BabyJohnEntity extends Monster
         this.setAlpha(pCompound.getBoolean("Alpha"));
         this.setLeaping(pCompound.getBoolean("Leaping"));
         this.setFleeing(pCompound.getBoolean("Fleeing"));
-
+        this.setSummonedAllies(pCompound.getBoolean("SummonedAllies"));
     }
 
     @Override
@@ -92,6 +97,7 @@ public class BabyJohnEntity extends Monster
         pCompound.putBoolean("Alpha", this.isAlpha());
         pCompound.putBoolean("Leaping", this.isLeaping());
         pCompound.putBoolean("Fleeing", this.isFleeing());
+        pCompound.putBoolean("SummonedAllies", this.hasSummonedAllies());
     }
 
     private void setupAnimationStates()
@@ -152,6 +158,12 @@ public class BabyJohnEntity extends Monster
             setupAnimationStates();
 
         super.tick();
+
+        if(this.isAlpha() && !this.hasSummonedAllies()) {
+            summonGroup(this, alphaSummonCount);
+            setSummonedAllies(true);
+        }
+
 
         if(this.tickCount % 60 == 0) {
             if(!this.hasAlpha && this.alpha == null) {
@@ -247,7 +259,21 @@ public class BabyJohnEntity extends Monster
             Vec3 targetVec = DefaultRandomPos.getPosAway(this, 13, 4, target.getDeltaMovement());
             if(targetVec != null) {
                 this.getNavigation().moveTo(targetVec.x, targetVec.y, targetVec.z, 1.0D);
-                return;
+            }
+        }
+    }
+
+    private void summonGroup(BabyJohnEntity john, double numSpawns)
+    {
+        EntityType<BabyJohnEntity> newJohnType = JMEntites.BABYJOHN.get();
+        if(!this.level().isClientSide) {
+            for(int i = 0; i < numSpawns; i++) {
+                BabyJohnEntity newJohn = newJohnType.create(this.level());
+                if(newJohn != null) {
+                    Vec3 spawnPos = LandRandomPos.getPos(john, 1, 5);
+                    newJohn.setPos(spawnPos);
+                    this.level().addFreshEntity(newJohn);
+                }
             }
         }
     }
@@ -265,53 +291,55 @@ public class BabyJohnEntity extends Monster
         return super.hurt(pSource, pAmount);
     }
 
-    public boolean isAlpha()
-    {
+    public boolean isAlpha() {
         return this.entityData.get(ALPHA);
     }
 
-    public void setAlpha(boolean bool)
-    {
+    public void setAlpha(boolean bool) {
         this.entityData.set(ALPHA, bool);
     }
 
-    public boolean isLeaping()
-    {
+    public boolean isLeaping() {
         return this.entityData.get(LEAPING);
     }
 
-    public void setLeaping(boolean bool)
-    {
+    public void setLeaping(boolean bool) {
         this.entityData.set(LEAPING, bool);
     }
 
-    public boolean isFleeing()
-    {
+    public boolean isFleeing() {
         return this.entityData.get(FLEEING);
     }
 
-    public void setFleeing(boolean bool)
-    {
+    public void setFleeing(boolean bool) {
         this.entityData.set(FLEEING, bool);
     }
 
-    public static boolean canSpawn(EntityType<BabyJohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosition, RandomSource random)
-    {
-        if (pLevel instanceof ServerLevel sLevel)
-        {
+    public boolean hasSummonedAllies() {
+        return entityData.get(SUMMONED_ALLIES);
+    }
+
+    public void setSummonedAllies(boolean bool) {
+        this.entityData.set(SUMMONED_ALLIES, bool);
+    }
+
+    public static boolean canSpawn(EntityType<BabyJohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosition, RandomSource random) {
+        if (pLevel instanceof ServerLevel sLevel) {
             long gameTime = sLevel.getGameTime();
             long daysPassed = gameTime / 24000L;
-            if(daysPassed < 2) return false;
+            //if(daysPassed < 2) return false;
 
             BlockPos worldSpawn = new BlockPos(
                     sLevel.getLevelData().getXSpawn(),
                     sLevel.getLevelData().getYSpawn(),
                     sLevel.getLevelData().getZSpawn());
             double distFromSpawn = Math.sqrt(sPosition.distSqr(worldSpawn));
-            if(distFromSpawn < 500.0D) return false;
+            //if(distFromSpawn < 500.0D) return false;
 
             DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
             float localDifficulty = difficulty.getEffectiveDifficulty();
+
+            alphaSummonCount = (localDifficulty - 0.5) * localDifficulty;
 
             double k = 3.0d;  // slope factor
             double x0 = 3.9d; // inflection point
@@ -324,8 +352,11 @@ public class BabyJohnEntity extends Monster
                 spawnChance *= 1.2F;  // increase spawn chance during rain or thunder
             }
 
-            if(random.nextDouble() < spawnChance)
+            if(random.nextDouble() < spawnChance) {
+                System.out.println("spawned");
                 return true;
+            }
+
 
         }
         return false;
