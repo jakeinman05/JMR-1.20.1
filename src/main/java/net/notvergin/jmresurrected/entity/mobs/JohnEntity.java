@@ -75,8 +75,6 @@ public class JohnEntity extends Monster
         this.walkAnimation.update(f, 0.2F);
     }
 
-    // maybe implement brain (use brainLib from one of the entity videos)
-
     public static AttributeSupplier.Builder createAttributes()
     {
         return Monster.createMonsterAttributes()
