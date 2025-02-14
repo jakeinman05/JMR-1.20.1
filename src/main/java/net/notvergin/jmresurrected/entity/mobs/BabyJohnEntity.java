@@ -40,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 
 public class BabyJohnEntity extends Monster
 {
@@ -271,8 +270,10 @@ public class BabyJohnEntity extends Monster
                 BabyJohnEntity newJohn = newJohnType.create(this.level());
                 if(newJohn != null) {
                     Vec3 spawnPos = LandRandomPos.getPos(john, 1, 5);
-                    newJohn.setPos(spawnPos);
-                    this.level().addFreshEntity(newJohn);
+                    if(spawnPos != null) {
+                        newJohn.setPos(spawnPos);
+                        this.level().addFreshEntity(newJohn);
+                    }
                 }
             }
         }
