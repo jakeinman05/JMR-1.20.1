@@ -201,8 +201,8 @@ public class JohnEntity extends Monster
             DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
             float localDifficulty = difficulty.getEffectiveDifficulty();
 
-            double k = 3.0d;  // slope factor
-            double x0 = 3.9d; // inflection point
+            double k = 1.8d;  // slope factor
+            double x0 = 3.7d; // inflection point
 
             // sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve
             double spawnChance = 1.0 / (1.0 + Math.exp(-k * (localDifficulty - x0)));
@@ -212,7 +212,9 @@ public class JohnEntity extends Monster
                 spawnChance *= 1.2F;  // increase spawn chance during rain or thunder
             }
 
-            return random.nextDouble() < spawnChance;
+            if(random.nextDouble() < spawnChance) {
+                return true;
+            }
         }
         return false;
     }
@@ -249,9 +251,6 @@ public class JohnEntity extends Monster
     public void checkDespawn()
     {
         if(this.getTarget() != null)
-            return;
-
-        if(this.level().getNearestPlayer(this, 128) != null)
             return;
 
         super.checkDespawn();
@@ -439,3 +438,6 @@ public class JohnEntity extends Monster
         }
     }
 }
+
+
+

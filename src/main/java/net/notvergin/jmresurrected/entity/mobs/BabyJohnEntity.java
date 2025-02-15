@@ -36,6 +36,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
+import net.notvergin.jmresurrected.customitems.JMModItems;
 import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
 import net.notvergin.jmresurrected.entity.registryhandlers.JMEntites;
 import net.notvergin.jmresurrected.sound.JMSounds;
@@ -139,7 +140,7 @@ public class BabyJohnEntity extends Monster
                 .add(Attributes.MOVEMENT_SPEED, 0.45D)
                 .add(Attributes.ATTACK_DAMAGE, 2.5D)
                 .add(Attributes.MAX_HEALTH, 20.0D)
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.FOLLOW_RANGE, 24.0D)
                 .build();
     }
 
@@ -170,10 +171,9 @@ public class BabyJohnEntity extends Monster
             setSummonedAllies(true);
         }
 
-
         if(this.tickCount % 60 == 0) {
             if(!this.hasAlpha && this.alpha == null) {
-                List<BabyJohnEntity> near = this.level().getNearbyEntities(BabyJohnEntity.class, TargetingConditions.forNonCombat(), this, this.getBoundingBox().inflate(8.0F));
+                List<BabyJohnEntity> near = this.level().getNearbyEntities(BabyJohnEntity.class, TargetingConditions.forNonCombat(), this, this.getBoundingBox().inflate(10.0F));
                 for(BabyJohnEntity nearby : near)
                 {
                     if(nearby.isAlpha()) {
@@ -275,7 +275,7 @@ public class BabyJohnEntity extends Monster
             for(int i = 0; i < numSpawns; i++) {
                 BabyJohnEntity newJohn = newJohnType.create(this.level());
                 if(newJohn != null) {
-                    Vec3 spawnPos = LandRandomPos.getPos(john, 1, 5);
+                    Vec3 spawnPos = LandRandomPos.getPos(john, 2, 5);
                     if(spawnPos != null) {
                         newJohn.setPos(spawnPos);
                         this.level().addFreshEntity(newJohn);
@@ -331,6 +331,11 @@ public class BabyJohnEntity extends Monster
     }
 
     @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return JMSounds.BABYJOHN_AMBIENT.get();
+    }
+
+    @Override
     protected @NotNull SoundEvent getHurtSound(DamageSource pDamageSource) {
         return JMSounds.BABYJOHN_HURT.get();
     }
@@ -343,6 +348,18 @@ public class BabyJohnEntity extends Monster
     @Override
     protected @NotNull ResourceLocation getDefaultLootTable() {
         return new ResourceLocation(MODID, "entities/babyjohn");
+    }
+
+    @Override
+    protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
+        super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
+        if(pSource.getDirectEntity() instanceof Player) {
+            if(this.isAlpha()) {
+                // replace with custom item
+                ItemStack dropShard = JMModItems.IMMORTALITY_SHARD.get().getDefaultInstance();
+                this.spawnAtLocation(dropShard);
+            }
+        }
     }
 
     public static boolean canSpawn(EntityType<BabyJohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosition, RandomSource random) {
@@ -363,8 +380,8 @@ public class BabyJohnEntity extends Monster
 
             alphaSummonCount = (localDifficulty - 0.5) * localDifficulty;
 
-            double k = 3.0d;  // slope factor
-            double x0 = 3.9d; // inflection point
+            double k = 1.2d;  // slope factor
+            double x0 = 3.6d; // inflection point
 
             // sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve
             double spawnChance = 1.0 / (1.0 + Math.exp(-k * (localDifficulty - x0)));
@@ -375,23 +392,18 @@ public class BabyJohnEntity extends Monster
             }
 
             if(random.nextDouble() < spawnChance) {
-                System.out.println("spawned");
                 return true;
             }
-
-
         }
         return false;
     }
 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-
         if(Math.random() >= 0.9)
             this.setAlpha(true);
 
-        return pSpawnData;
+        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
     @Override
@@ -445,7 +457,7 @@ public class BabyJohnEntity extends Monster
                 else if (dist > 2.0F && dist < 7.0F && john.wantsToJump && !john.isLeaping())
                 {
                     john.setLeaping(true);
-                    this.john.level().playSound(null, this.john.getX(), this.john.getY(), this.john.getZ(), JMSounds.BABYJOHN_JUMP.get(), SoundSource.HOSTILE, 0.7F, this.john.random.nextFloat());
+                    this.john.playSound(JMSounds.BABYJOHN_JUMP.get(), 0.5F, 1.0F + john.random.nextFloat() * 0.2F);
                     Vec3 johnVec = john.getDeltaMovement();
                     Vec3 targetVec = new Vec3(target.getX() - john.getX(), 0, target.getZ() - john.getZ());
                     if(targetVec.lengthSqr() > 1.0E-7D)

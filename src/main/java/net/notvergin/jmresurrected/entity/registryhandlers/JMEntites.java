@@ -23,7 +23,7 @@ public class JMEntites
                     .build("john"));
     public static final RegistryObject<EntityType<BabyJohnEntity>> BABYJOHN =
             ENTITY_TYPES.register("babyjohn", () -> EntityType.Builder.of(BabyJohnEntity::new, MobCategory.MONSTER)
-                    .sized(0.5F, 1.0F)
+                    .sized(0.5F, 0.9F)
                     .setTrackingRange(12)
                     .build("babyjohn"));
 
