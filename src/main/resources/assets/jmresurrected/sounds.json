@@ -29,10 +29,10 @@
       "jmresurrected:babyjohn_hurt"
     ]
   },
-  "babyjohn_death": {
-    "subtitles": "sounds.jmresurrected.babyjohn_death",
+  "babyjohn_jump": {
+    "subtitles": "sounds.jmresurrected.babyjohn_jump",
     "sounds": [
-      "jmresurrected:babyjohn_death"
+      "jmresurrected:babyjohn_jump"
     ]
   }
 }
