@@ -8,7 +8,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -20,8 +19,6 @@ import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
-import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
@@ -71,6 +68,7 @@ public class BabyJohnEntity extends Monster
     private LivingEntity avoidEntity;
     private boolean wantsToJump = false;
 
+    private int attackTicks = 0;
     private final double defaultDamage = this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
 
     public BabyJohnEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
@@ -165,6 +163,10 @@ public class BabyJohnEntity extends Monster
             setupAnimationStates();
 
         super.tick();
+
+        if(this.attackTicks > 0) {
+            --attackTicks;
+        }
 
         if(this.isAlpha() && !this.hasSummonedAllies()) {
             summonGroup(this, alphaSummonCount);
@@ -366,7 +368,7 @@ public class BabyJohnEntity extends Monster
         if (pLevel instanceof ServerLevel sLevel) {
             long gameTime = sLevel.getGameTime();
             long daysPassed = gameTime / 24000L;
-            if(daysPassed < 3) return false;
+            if(daysPassed < 4) return false;
 
             BlockPos worldSpawn = new BlockPos(
                     sLevel.getLevelData().getXSpawn(),
@@ -378,9 +380,9 @@ public class BabyJohnEntity extends Monster
             DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
             float localDifficulty = difficulty.getEffectiveDifficulty();
 
-            alphaSummonCount = (localDifficulty - 0.5) * localDifficulty;
+            alphaSummonCount = localDifficulty > 1 ? localDifficulty * random.nextInt(3) + 1 : 1;
 
-            double k = 1.2d;  // slope factor
+            double k = 1.1d; // slope factor
             double x0 = 3.6d; // inflection point
 
             // sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve
@@ -449,7 +451,12 @@ public class BabyJohnEntity extends Monster
                 double dist = john.distanceTo(target);
 
                 if(john.isLeaping()) {
-                    checkDamage(target);
+                    if(john.attackTicks <= 0) {
+                        if(checkDamage(target)) {
+                            john.attackTicks = 30;
+                        }
+                    }
+
                     if(john.onGround() || john.isInWaterOrBubble()) {
                         john.setLeaping(false);
                     }
@@ -467,13 +474,15 @@ public class BabyJohnEntity extends Monster
                 // chance to jump
                 else {
                     john.getNavigation().moveTo(target, 1.0D);
-                    if(checkDamage(target))
-                    {
-                        Vec3 randVec = getRandomPosition(john);
-                        if(randVec != null)
-                            john.getNavigation().moveTo(randVec.x, randVec.y, randVec.z, 1.0D);
+                    if(john.attackTicks <= 0) {
+                        if(checkDamage(target))
+                        {
+                            john.attackTicks = 15;
+                            Vec3 randVec = getRandomPosition(john);
+                            if(randVec != null)
+                                john.getNavigation().moveTo(randVec.x, randVec.y, randVec.z, 1.0D);
+                        }
                     }
-
                 }
             }
 
@@ -508,9 +517,6 @@ public class BabyJohnEntity extends Monster
             this.navigation = pMob.getNavigation();
             this.stopDistance = pStopDistance;
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-            if (!(pMob.getNavigation() instanceof GroundPathNavigation) && !(pMob.getNavigation() instanceof FlyingPathNavigation)) {
-                throw new IllegalArgumentException("Unsupported mob type for FollowMobGoal");
-            }
         }
 
         @Override
