@@ -1,6 +1,6 @@
-package net.notvergin.jmresurrected.entity.mobs;
+package net.notvergin.jmresurrected.entity.livingentity;
 
-import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
+import net.notvergin.jmresurrected.items.weapons.ImmortalBlade;
 import net.notvergin.jmresurrected.sound.JMSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -183,6 +183,11 @@ public class JohnEntity extends Monster
         }
     }
 
+    @Override
+    public int getExperienceReward() {
+        return 45;
+    }
+
     public static boolean canSpawn(EntityType<JohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosition, RandomSource random)
     {
         if (pLevel instanceof ServerLevel sLevel)
@@ -201,7 +206,7 @@ public class JohnEntity extends Monster
             DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
             float localDifficulty = difficulty.getEffectiveDifficulty();
 
-            double k = 1.8d;  // slope factor
+            double k = 1.6d;  // slope factor
             double x0 = 3.7d; // inflection point
 
             // sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve
