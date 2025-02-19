@@ -6,6 +6,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.notvergin.jmresurrected.entity.JMEntites;
 import net.notvergin.jmresurrected.entity.client.RenderBabyJohn;
 import net.notvergin.jmresurrected.entity.client.RenderJohn;
 import net.notvergin.jmresurrected.entity.models.JMModelLayers;

@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.notvergin.jmresurrected.entity.animations.BabyJohnAnimationDefinition;
-import net.notvergin.jmresurrected.entity.mobs.BabyJohnEntity;
+import net.notvergin.jmresurrected.entity.livingentity.BabyJohnEntity;
 
 public class BabyJohnModel<T extends BabyJohnEntity> extends HierarchicalModel<T> {
 	private final ModelPart babyjohn;

@@ -1,11 +1,11 @@
-package net.notvergin.jmresurrected.customitems;
+package net.notvergin.jmresurrected.items;
 
-import net.notvergin.jmresurrected.customitems.item.ImmortalGem;
-import net.notvergin.jmresurrected.customitems.item.ImmortalHusk;
-import net.notvergin.jmresurrected.customitems.item.RefImmortalityGem;
-import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
-import net.notvergin.jmresurrected.entity.registryhandlers.JMEntites;
-import net.notvergin.jmresurrected.registries.JMToolTiers;
+import net.notvergin.jmresurrected.items.item.ImmortalGem;
+import net.notvergin.jmresurrected.items.item.ImmortalHusk;
+import net.notvergin.jmresurrected.items.item.RefImmortalityGem;
+import net.notvergin.jmresurrected.items.weapons.ImmortalBlade;
+import net.notvergin.jmresurrected.entity.JMEntites;
+import net.notvergin.jmresurrected.util.JMToolTiers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tiers;
@@ -17,7 +17,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
-public class JMModItems
+public class JMItems
 {
     // Creates a deferred register for new items, based off forge registries
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);

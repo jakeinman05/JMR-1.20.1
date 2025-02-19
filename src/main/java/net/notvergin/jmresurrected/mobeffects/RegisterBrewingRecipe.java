@@ -1,6 +1,6 @@
 package net.notvergin.jmresurrected.mobeffects;
 
-import net.notvergin.jmresurrected.customitems.JMModItems;
+import net.notvergin.jmresurrected.items.JMItems;
 import net.notvergin.jmresurrected.mobeffects.potions.JMPotionRegistry;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,7 +25,7 @@ public class RegisterBrewingRecipe
 
             @Override
             public boolean isIngredient(ItemStack ingredient) {
-                return ingredient.getItem() == JMModItems.IMMORTAL_HUSK.get();
+                return ingredient.getItem() == JMItems.IMMORTAL_HUSK.get();
             }
 
             @Override

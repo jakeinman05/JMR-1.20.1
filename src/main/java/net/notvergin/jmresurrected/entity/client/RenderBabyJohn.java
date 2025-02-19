@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.notvergin.jmresurrected.entity.mobs.BabyJohnEntity;
+import net.notvergin.jmresurrected.entity.livingentity.BabyJohnEntity;
 import net.notvergin.jmresurrected.entity.models.JMModelLayers;
 import net.notvergin.jmresurrected.entity.models.entity.BabyJohnModel;
 import org.jetbrains.annotations.NotNull;

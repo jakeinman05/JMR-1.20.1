@@ -1,7 +1,7 @@
-package net.notvergin.jmresurrected.entity.registryhandlers;
+package net.notvergin.jmresurrected.entity;
 
-import net.notvergin.jmresurrected.entity.mobs.BabyJohnEntity;
-import net.notvergin.jmresurrected.entity.mobs.JohnEntity;
+import net.notvergin.jmresurrected.entity.livingentity.BabyJohnEntity;
+import net.notvergin.jmresurrected.entity.livingentity.JohnEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;

@@ -1,6 +1,6 @@
 package net.notvergin.jmresurrected.datagen;
 
-import net.notvergin.jmresurrected.customitems.JMModItems;
+import net.notvergin.jmresurrected.items.JMItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -19,17 +19,17 @@ public class JMItemModelProvider extends ItemModelProvider
 
     @Override
     protected void registerModels() {
-        buildItem(JMModItems.IMMORTALITY_GEM);
-        buildItem(JMModItems.JOHN_TEAR);
-        buildItem(JMModItems.IMMORTALITY_SHARD);
-        buildItem(JMModItems.IMMORTAL_HUSK);
-        buildItem(JMModItems.REFINED_IMMORTAL_GEM);
+        buildItem(JMItems.IMMORTALITY_GEM);
+        buildItem(JMItems.JOHN_TEAR);
+        buildItem(JMItems.IMMORTALITY_SHARD);
+        buildItem(JMItems.IMMORTAL_HUSK);
+        buildItem(JMItems.REFINED_IMMORTAL_GEM);
 
-        buildHandheldItem(JMModItems.IMMORTALITY_SWORD);
-        buildHandheldItem(JMModItems.UIMMORTALITY_SWORD);
+        buildHandheldItem(JMItems.IMMORTALITY_SWORD);
+        buildHandheldItem(JMItems.UIMMORTALITY_SWORD);
 
-        withExistingParent(JMModItems.JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
-        withExistingParent(JMModItems.BABY_JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(JMItems.JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(JMItems.BABY_JOHN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
     }
 
     private ItemModelBuilder buildItem(RegistryObject<Item> item)

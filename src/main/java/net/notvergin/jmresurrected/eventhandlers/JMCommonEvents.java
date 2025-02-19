@@ -1,7 +1,7 @@
 package net.notvergin.jmresurrected.eventhandlers;
 
-import net.notvergin.jmresurrected.entity.mobs.BabyJohnEntity;
-import net.notvergin.jmresurrected.entity.mobs.JohnEntity;
+import net.notvergin.jmresurrected.entity.livingentity.BabyJohnEntity;
+import net.notvergin.jmresurrected.entity.livingentity.JohnEntity;
 import net.notvergin.jmresurrected.mobeffects.JMMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;

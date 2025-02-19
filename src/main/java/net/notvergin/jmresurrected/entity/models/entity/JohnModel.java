@@ -3,7 +3,7 @@ package net.notvergin.jmresurrected.entity.models.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.notvergin.jmresurrected.entity.animations.JohnAnimationDefinition;
-import net.notvergin.jmresurrected.entity.mobs.JohnEntity;
+import net.notvergin.jmresurrected.entity.livingentity.JohnEntity;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

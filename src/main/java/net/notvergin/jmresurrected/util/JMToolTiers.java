@@ -1,4 +1,4 @@
-package net.notvergin.jmresurrected.registries;
+package net.notvergin.jmresurrected.util;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;

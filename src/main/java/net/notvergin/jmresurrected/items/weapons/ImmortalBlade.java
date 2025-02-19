@@ -1,4 +1,4 @@
-package net.notvergin.jmresurrected.customitems.weapons;
+package net.notvergin.jmresurrected.items.weapons;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;

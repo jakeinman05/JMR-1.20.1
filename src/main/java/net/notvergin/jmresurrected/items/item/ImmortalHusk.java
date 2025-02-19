@@ -1,4 +1,4 @@
-package net.notvergin.jmresurrected.customitems.item;
+package net.notvergin.jmresurrected.items.item;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

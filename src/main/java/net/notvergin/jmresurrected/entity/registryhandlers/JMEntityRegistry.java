@@ -6,8 +6,9 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.notvergin.jmresurrected.entity.mobs.BabyJohnEntity;
-import net.notvergin.jmresurrected.entity.mobs.JohnEntity;
+import net.notvergin.jmresurrected.entity.JMEntites;
+import net.notvergin.jmresurrected.entity.livingentity.BabyJohnEntity;
+import net.notvergin.jmresurrected.entity.livingentity.JohnEntity;
 
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
