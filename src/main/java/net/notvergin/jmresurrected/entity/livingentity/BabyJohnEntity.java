@@ -1,4 +1,4 @@
-package net.notvergin.jmresurrected.entity.mobs;
+package net.notvergin.jmresurrected.entity.livingentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -33,9 +33,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
-import net.notvergin.jmresurrected.customitems.JMModItems;
-import net.notvergin.jmresurrected.customitems.weapons.ImmortalBlade;
-import net.notvergin.jmresurrected.entity.registryhandlers.JMEntites;
+import net.notvergin.jmresurrected.items.JMItems;
+import net.notvergin.jmresurrected.items.weapons.ImmortalBlade;
+import net.notvergin.jmresurrected.entity.JMEntites;
 import net.notvergin.jmresurrected.sound.JMSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -241,7 +241,7 @@ public class BabyJohnEntity extends Monster
             this.avoidEntity = this.getLastAttacker();
         }
 
-        if(!this.level().isClientSide && isFleeing() && !(this.fleeTimeoutTicks > 0) && this.fleeTicks > 0 && (this.avoidEntity instanceof Player player && !player.isCreative())) {
+        if(!this.level().isClientSide && isFleeing() && !(this.fleeTimeoutTicks > 0) && (this.fleeTicks > 0 || this.distanceToSqr(this.avoidEntity.position()) < 32.0) && (this.avoidEntity instanceof Player player && !player.isCreative())) {
             fleeFromTargetPosition(this.avoidEntity);
         }
 
@@ -285,6 +285,11 @@ public class BabyJohnEntity extends Monster
                 }
             }
         }
+    }
+
+    @Override
+    public int getExperienceReward() {
+        return this.isAlpha() ? 15 : super.getExperienceReward();
     }
 
     @Override
@@ -358,7 +363,7 @@ public class BabyJohnEntity extends Monster
         if(pSource.getDirectEntity() instanceof Player) {
             if(this.isAlpha()) {
                 // replace with custom item
-                ItemStack dropShard = JMModItems.IMMORTALITY_SHARD.get().getDefaultInstance();
+                ItemStack dropShard = JMItems.IMMORTALITY_SHARD.get().getDefaultInstance();
                 this.spawnAtLocation(dropShard);
             }
         }
