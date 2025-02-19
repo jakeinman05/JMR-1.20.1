@@ -1,10 +1,12 @@
 package net.notvergin.jmresurrected;
 
+import net.notvergin.jmresurrected.blocks.JMBlocks;
+import net.notvergin.jmresurrected.blocks.blockentities.JMBlockEntities;
 import net.notvergin.jmresurrected.mobeffects.RegisterBrewingRecipe;
 import net.notvergin.jmresurrected.mobeffects.potions.JMPotionRegistry;
-import net.notvergin.jmresurrected.entity.registryhandlers.JMEntites;
+import net.notvergin.jmresurrected.entity.JMEntites;
 import net.notvergin.jmresurrected.mobeffects.JMMobEffects;
-import net.notvergin.jmresurrected.customitems.JMModItems;
+import net.notvergin.jmresurrected.items.JMItems;
 import net.notvergin.jmresurrected.sound.JMSounds;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,7 +30,9 @@ public class JohnModResurrected
         IEventBus modEventBus = context.getModEventBus();
 
         JMEntites.register(modEventBus);
-        JMModItems.register(modEventBus);
+        JMBlocks.register(modEventBus);
+        JMBlockEntities.register(modEventBus);
+        JMItems.register(modEventBus);
         JMMobEffects.register(modEventBus);
         JMPotionRegistry.register(modEventBus);
         JMSounds.register(modEventBus);
@@ -48,21 +52,21 @@ public class JohnModResurrected
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(JMModItems.JOHN_TEAR);
-            event.accept(JMModItems.IMMORTALITY_GEM);
-            event.accept(JMModItems.IMMORTALITY_SHARD);
-            event.accept(JMModItems.IMMORTAL_HUSK);
+            event.accept(JMItems.JOHN_TEAR);
+            event.accept(JMItems.IMMORTALITY_GEM);
+            event.accept(JMItems.IMMORTALITY_SHARD);
+            event.accept(JMItems.IMMORTAL_HUSK);
         }
         if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(JMModItems.REFINED_IMMORTAL_GEM);
+            event.accept(JMItems.REFINED_IMMORTAL_GEM);
         }
         if(event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-            event.accept(JMModItems.JOHN_EGG);
-            event.accept(JMModItems.BABY_JOHN_EGG);
+            event.accept(JMItems.JOHN_EGG);
+            event.accept(JMItems.BABY_JOHN_EGG);
         }
         if(event.getTabKey() == CreativeModeTabs.COMBAT) {
-            event.accept(JMModItems.IMMORTALITY_SWORD);
-            event.accept(JMModItems.UIMMORTALITY_SWORD);
+            event.accept(JMItems.IMMORTALITY_SWORD);
+            event.accept(JMItems.UIMMORTALITY_SWORD);
         }
     }
 
