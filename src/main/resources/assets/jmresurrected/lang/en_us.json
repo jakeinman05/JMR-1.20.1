@@ -8,6 +8,10 @@
   "item.jmresurrected.immortality_sword" : "Immortal Blade",
   "item.jmresurrected.uimmortality_sword": "Immortal Blade",
 
+  "block.jmresurrected.immortal_gem_block": "Immortality Gem Block",
+  "block.jmresurrected.immortal_shard_block": "Immortality Shard Block",
+  "block.jmresurrected.perennial_block": "Perennial",
+
   "entity.jmresurrected.john": "John",
   "entity.jmresurrected.babyjohn": "Baby John",
   "item.jmresurrected.john_spawn_egg": "John Spawn Egg",
@@ -21,5 +25,7 @@
 
   "sounds.jmresurrected.john_ambient": "John Screech",
   "sounds.jmresurrected.john_hurt": "John Hurt",
-  "sounds.jmresurrected.john_death": "John Death"
+  "sounds.jmresurrected.john_death": "John Death",
+  "sounds.jmresurrected.babyjohn_ambient": "BabyJohn Screech",
+  "sounds.jmresurrected.babyjohn_hurt": "BabyJohn Hurt"
 }
