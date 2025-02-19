@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "jmresurrected:immortal_gem_block" }
+  ],
+  "result": {
+    "item": "jmresurrected:immortality_gem",
+    "count": 9
+  }
+}

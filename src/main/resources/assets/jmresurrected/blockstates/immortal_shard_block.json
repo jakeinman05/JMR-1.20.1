@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "jmresurrected:block/immortal_shard_block"
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "up": "jmresurrected:block/immortal_gem_block_face",
+    "down": "jmresurrected:block/immortal_gem_block_face",
+    "north": "jmresurrected:block/immortal_gem_block_front",
+    "south": "jmresurrected:block/immortal_gem_block_face",
+    "east": "jmresurrected:block/immortal_gem_block_face",
+    "west": "jmresurrected:block/immortal_gem_block_face",
+    "particle": "jmresurrected:block/immortal_gem_block_face"
+  }
+}

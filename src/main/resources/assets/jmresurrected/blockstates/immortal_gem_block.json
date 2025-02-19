@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": {"model": "jmresurrected:block/immortal_gem_block"},
+    "facing=south": {"model": "jmresurrected:block/immortal_gem_block", "y": 180},
+    "facing=west": {"model": "jmresurrected:block/immortal_gem_block", "y": 270},
+    "facing=east": {"model": "jmresurrected:block/immortal_gem_block", "y": 90}
+  }
+}
