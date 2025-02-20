@@ -5,7 +5,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -22,7 +21,7 @@ public class JMBlocks
 {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
 
-    public static final RegistryObject<Block> PERENNIAL_BLOCK = registerRareBlockWithItem("perennial_block", () -> new PerennialBlock());
+    public static final RegistryObject<Block> PERENNIAL_BLOCK = registerRareBlockWithItem("perennial", () -> new PerennialBlock());
     public static final RegistryObject<Block> IMMORTAL_GEM_BLOCK = registerBlockWithItem("immortal_gem_block", () -> new ImmortalGemBlock());
     public static final RegistryObject<Block> IMMORTAL_SHARD_BLOCK = registerBlockWithItem("immortal_shard_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(DyeColor.PINK).sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops().strength(5.0F, 20.0F)));
 
