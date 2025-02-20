@@ -187,8 +187,6 @@ public class BabyJohnEntity extends Monster
             }
         }
 
-        this.avoidEntity = this.getLastHurtByMob();
-
         if(this.hasAlpha && !this.alpha.isAlive()) {
             this.alpha = null;
             this.hasAlpha = false;
@@ -238,7 +236,7 @@ public class BabyJohnEntity extends Monster
 
             int i = 100 + this.random.nextInt(20);
             this.fleeTicks = i;
-            this.avoidEntity = this.getLastAttacker();
+            this.avoidEntity = this.getLastHurtByMob();
         }
 
         if(!this.level().isClientSide && isFleeing() && !(this.fleeTimeoutTicks > 0) && (this.fleeTicks > 0 || this.distanceToSqr(this.avoidEntity.position()) < 32.0) && (this.avoidEntity instanceof Player player && !player.isCreative())) {
@@ -246,7 +244,6 @@ public class BabyJohnEntity extends Monster
         }
 
         if(isFleeing() && fleeTicks == 0) {
-            this.getLastAttacker();
             if(this.avoidEntity != null && (!this.avoidEntity.hasLineOfSight(this) || this.distanceToSqr(this.avoidEntity) > 50.0D))
                 this.heal(10.0F);
             setFleeing(false);
@@ -474,7 +471,7 @@ public class BabyJohnEntity extends Monster
                     Vec3 targetVec = new Vec3(target.getX() - john.getX(), 0, target.getZ() - john.getZ());
                     if(targetVec.lengthSqr() > 1.0E-7D)
                         targetVec = targetVec.normalize().scale(0.9F).add(johnVec.scale(0.5));
-                    john.setDeltaMovement(targetVec.x, 0.6D, targetVec.z);
+                    john.setDeltaMovement(targetVec.x, 0.5D, targetVec.z);
                 }
                 // chance to jump
                 else {
