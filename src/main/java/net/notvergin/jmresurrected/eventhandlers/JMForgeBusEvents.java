@@ -89,7 +89,7 @@ public class JMForgeBusEvents
             Item handItem = player.getMainHandItem().getItem();
             Block clickedBlock = state.getBlock();
 
-            if(clickedBlock instanceof ImmortalGemBlock gemBlock && !player.isShiftKeyDown()) {
+            if(clickedBlock instanceof ImmortalGemBlock && !player.isShiftKeyDown()) {
                 if(handItem == JMItems.REFINED_IMMORTAL_GEM.get()) {
                     player.swing(InteractionHand.MAIN_HAND);
 
@@ -97,13 +97,10 @@ public class JMForgeBusEvents
                         player.getMainHandItem().shrink(1);
                     }
 
-                    gemBlock.destroy(level, event.getPos(), state);
-
-                    ((ServerLevel) level).sendParticles(ParticleTypes.DRAGON_BREATH, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, 0.2D, 0.3D, 0.2D, 0.1D );
-                    //level.playSound(null, pos, SoundEvents.WITHER_SPAWN, SoundSource.BLOCKS, 0.3F, 0.3F);
-
+                    level.destroyBlock(pos, false);
                     BlockState perennial = JMBlocks.PERENNIAL_BLOCK.get().defaultBlockState();
                     level.setBlockAndUpdate(pos, perennial);
+                    ((ServerLevel) level).sendParticles(ParticleTypes.DRAGON_BREATH, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, 0.2D, 0.3D, 0.2D, 0.1D );
 
                     event.setCancellationResult(InteractionResult.CONSUME);
                 }
@@ -116,7 +113,11 @@ public class JMForgeBusEvents
         if(!player.level().isClientSide) {
             player.swing(InteractionHand.MAIN_HAND);
             player.swing(InteractionHand.OFF_HAND);
-            player.getOffhandItem().shrink(1);
+
+            if(!player.isCreative()) {
+                player.getOffhandItem().shrink(1);
+            }
+
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ANVIL_DESTROY, SoundSource.PLAYERS, 1.0F, 1.0F);
 
             ((ServerLevel) player.level()).sendParticles(ParticleTypes.DRAGON_BREATH, player.getX(), player.getY() + 1, player.getZ(), 16, 0.3, 0.3, 0.3, 0.2);
