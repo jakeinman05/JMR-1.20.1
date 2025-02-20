@@ -7,6 +7,6 @@
     "south": "jmresurrected:block/perennial_side",
     "west": "jmresurrected:block/perennial_side",
     "east": "jmresurrected:block/perennial_side",
-    "particle": "jmresurrected:block/perennial_side"
+    "particle": "jmresurrected:block/perennial_top"
   }
 }
