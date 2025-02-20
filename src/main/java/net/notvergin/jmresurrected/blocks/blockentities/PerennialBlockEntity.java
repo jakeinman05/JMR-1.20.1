@@ -16,24 +16,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.notvergin.jmresurrected.items.JMItems;
 import net.notvergin.jmresurrected.mobeffects.JMMobEffects;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.notvergin.jmresurrected.sound.JMSounds;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static net.notvergin.jmresurrected.blocks.PerennialBlock.ACTIVE;
 
 public class PerennialBlockEntity extends BaseContainerBlockEntity {
-    public static Logger LOGGER = LoggerFactory.getLogger("PerennialBlockEntity");
 
     private static final int defaultEffectTicks = 60;
     private int effectTicks = 0;
 
-    private ItemStack gemStack = ItemStack.EMPTY;
+    private ItemStack gemStack = new ItemStack(JMItems.REFINED_IMMORTAL_GEM.get());
 
     public PerennialBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(JMBlockEntities.PERENNIAL.get(), pPos, pBlockState);
-        this.addGemStack();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, PerennialBlockEntity perennial) {
@@ -41,16 +39,15 @@ public class PerennialBlockEntity extends BaseContainerBlockEntity {
 
             if(!perennial.isActive() && perennial.getGemStack() > 0) {
                 perennial.setActive(true);
-                level.playSound(null, perennial.worldPosition, SoundEvents.WITHER_SPAWN, SoundSource.BLOCKS, 0.3F, 0.3F);
-                LOGGER.info("Perennial Activated");
+                level.playSound(null, perennial.worldPosition, JMSounds.PERENNIAL_ACTIVATE.get(), SoundSource.BLOCKS, 1.0F, 0.9F);
+                level.playSound(null, perennial.worldPosition, SoundEvents.WITHER_SPAWN, SoundSource.BLOCKS, 0.2F, 0.3F);
             }
 
             if(perennial.isActive() && perennial.getGemStack() <= 0) {
                 perennial.setActive(false);
                 level.playSound(null, perennial.worldPosition, SoundEvents.WITHER_DEATH, SoundSource.BLOCKS, 0.3F, 0.4F);
+                level.destroyBlock(perennial.worldPosition, false);
                 perennial.effectTicks = 0;
-
-                LOGGER.info("Perennial Deactivated");
             }
 
             if(perennial.isActive()) {
@@ -58,16 +55,16 @@ public class PerennialBlockEntity extends BaseContainerBlockEntity {
                     perennial.effectTicks--;
                 }
                 if(perennial.effectTicks <= 0) {
-                    doApplyEffect(level, pos, perennial.getGemStack(), perennial);
+                    doApplyEffect(level, pos, perennial.getGemStack());
                     perennial.effectTicks = defaultEffectTicks;
                 }
             }
         }
     }
 
-    private static void doApplyEffect(Level level, BlockPos pos, int gems, PerennialBlockEntity perennial) {
+    private static void doApplyEffect(Level level, BlockPos pos, int gems) {
         if(!level.isClientSide) {
-            double range = 16 * (gems + 2);
+            double range = 12 * (gems + 2);
 
             AABB aabb = new AABB(pos).inflate(range).expandTowards(0.0D, level.getHeight(), 0.0D);
             List<Player> players = level.getEntitiesOfClass(Player.class, aabb);
@@ -93,7 +90,7 @@ public class PerennialBlockEntity extends BaseContainerBlockEntity {
 
     public void addGemStack() {
         if(gemStack.isEmpty()) {
-            gemStack = new ItemStack(JMItems.IMMORTALITY_GEM.get());
+            gemStack = new ItemStack(JMItems.REFINED_IMMORTAL_GEM.get());
         }
         else
             gemStack.grow(1);
@@ -115,13 +112,11 @@ public class PerennialBlockEntity extends BaseContainerBlockEntity {
     public void load(CompoundTag pTag) {
         super.load(pTag);
 
-        int i = pTag.getInt("GemCount");
+        int i = pTag.getInt("GemCount") - 1;
         for(int  j = 0; j < i; j++) {
             this.addGemStack();
         }
         effectTicks = pTag.getInt("effectTicks");
-
-        LOGGER.info("Perennial loaded :: GemCount = {}", gemStack);
     }
 
     @Override
@@ -130,17 +125,15 @@ public class PerennialBlockEntity extends BaseContainerBlockEntity {
 
         pTag.putInt("GemCount", gemStack.getCount());
         pTag.putInt("effectTicks", effectTicks);
-
-        LOGGER.info("Perennial saved :: GemCount = {}", gemStack);
     }
 
     @Override
-    protected Component getDefaultName() {
+    protected @NotNull Component getDefaultName() {
         return Component.translatable("container.perennial");
     }
 
     @Override
-    protected AbstractContainerMenu createMenu(int pContainerId, Inventory pInventory) {
+    protected @NotNull AbstractContainerMenu createMenu(int pContainerId, Inventory pInventory) {
         return null;
     }
 
@@ -155,12 +148,12 @@ public class PerennialBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    public ItemStack getItem(int slot) {
+    public @NotNull ItemStack getItem(int slot) {
         return slot == 0 ? gemStack : ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack removeItem(int slot, int amount) {
+    public @NotNull ItemStack removeItem(int slot, int amount) {
         if (slot == 0 && !gemStack.isEmpty()) {
             return gemStack.split(amount);
         }
@@ -168,7 +161,7 @@ public class PerennialBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int slot) {
+    public @NotNull ItemStack removeItemNoUpdate(int slot) {
         if(slot == 0) {
             ItemStack items = gemStack;
             gemStack = ItemStack.EMPTY;
