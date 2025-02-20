@@ -36,9 +36,9 @@ public class JMItems
 
     // Tools
     public static final RegistryObject<Item> IMMORTALITY_SWORD = ITEMS.register("immortality_sword",
-            () -> new ImmortalBlade(Tiers.NETHERITE, 3, -2.4F, new Item.Properties().rarity(Rarity.RARE).fireResistant()));
+            () -> new ImmortalBlade(Tiers.DIAMOND, 2, -2.4F, new Item.Properties().rarity(Rarity.RARE).fireResistant()));
     public static final RegistryObject<Item> UIMMORTALITY_SWORD = ITEMS.register("uimmortality_sword",
-            () -> new ImmortalBlade(JMToolTiers.IMMORTAL, 10, -2.4F, new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
+            () -> new ImmortalBlade(JMToolTiers.IMMORTAL, 7, -2.4F, new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
 
     //Spawn Eggs
     public static final RegistryObject<Item> JOHN_EGG = ITEMS.register("john_spawn_egg",
