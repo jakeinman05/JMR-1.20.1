@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -41,7 +42,7 @@ public class PerennialBlock extends BaseEntityBlock {
     public static final ToIntFunction<BlockState> LIGHT_EMISSION = (blockState) -> blockState.getValue(ACTIVE) ? 10 : 0;
 
     protected PerennialBlock() {
-        super(BlockBehaviour.Properties.of().mapColor(DyeColor.PURPLE).strength(50.0F, 200.0F).sound(SoundType.NETHERITE_BLOCK).lightLevel(LIGHT_EMISSION));
+        super(BlockBehaviour.Properties.of().mapColor(DyeColor.PURPLE).strength(200.0F).sound(SoundType.NETHERITE_BLOCK).lightLevel(LIGHT_EMISSION));
         this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, Boolean.valueOf(false)));
     }
 
@@ -62,25 +63,31 @@ public class PerennialBlock extends BaseEntityBlock {
             ItemStack handItem = player.getMainHandItem();
 
             if(blockEntity instanceof PerennialBlockEntity perennial && !player.isShiftKeyDown()) {
-                if(!handItem.isEmpty() && handItem.getItem() == JMItems.IMMORTALITY_GEM.get()) {
+                if(!handItem.isEmpty() && handItem.getItem() == JMItems.REFINED_IMMORTAL_GEM.get() && perennial.getGemStack() <= 3) {
                     player.swing(hand);
                     if(!player.isCreative()) {
                         handItem.shrink(1);
                     }
                     perennial.addGemStack();
-                    level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.AMETHYST_BLOCK_PLACE, SoundSource.PLAYERS, 1.0F, 1.0F);
                     return InteractionResult.CONSUME;
                 }
-                if(handItem.isEmpty() && perennial.getGemStack() > 0) {
-                    player.swing(hand);
-                    player.addItem(JMItems.IMMORTALITY_GEM.get().getDefaultInstance());
-                    perennial.decrementGemStack();
-                    level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    return InteractionResult.CONSUME;
-                }
+//                if(handItem.isEmpty() && perennial.getGemStack() > 0 && perennial.isActive()) {
+//                    player.swing(hand);
+//                    player.addItem(JMItems.REFINED_IMMORTAL_GEM.get().getDefaultInstance());
+//                    perennial.decrementGemStack();
+//                    level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.PLAYERS, 1.0F, 1.0F);
+//                    return InteractionResult.CONSUME;
+//                }
             }
         }
         return InteractionResult.CONSUME_PARTIAL;
+    }
+
+    @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        level.playSound(null, pos, SoundEvents.WITHER_DEATH, SoundSource.BLOCKS, 0.3F, 0.4F);
+        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
 
     @Override
