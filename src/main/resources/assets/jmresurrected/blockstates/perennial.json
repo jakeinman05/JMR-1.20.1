@@ -1,9 +1,10 @@
 {
   "variants": {
-    "": [
-      {
-        "model": "jmresurrected:block/perennial"
-      }
-    ]
+    "active=false": {
+      "model": "jmresurrected:block/perennial"
+    },
+    "active=true": {
+      "model": "jmresurrected:block/perennial_active"
+    }
   }
 }

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "jmresurrected:block/perennial_top",
+    "up": "jmresurrected:block/perennial_top",
+    "north": "jmresurrected:block/perennial_side",
+    "south": "jmresurrected:block/perennial_side",
+    "west": "jmresurrected:block/perennial_side",
+    "east": "jmresurrected:block/perennial_side",
+    "particle": "jmresurrected:block/perennial_side"
+  }
+}

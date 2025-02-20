@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "jmresurrected:block/perennial"
+    "all": "jmresurrected:block/immortal_shard_block"
   }
 }
