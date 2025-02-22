@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.notvergin.jmresurrected.blocks.ImmortalGemBlock;
 import net.notvergin.jmresurrected.blocks.JMBlocks;
-import net.notvergin.jmresurrected.blocks.PerennialBlock;
 import net.notvergin.jmresurrected.items.JMItems;
 import net.notvergin.jmresurrected.items.weapons.ImmortalBlade;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,7 +23,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
-import static net.notvergin.jmresurrected.blocks.PerennialBlock.ACTIVE;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class JMForgeBusEvents
@@ -43,9 +41,12 @@ public class JMForgeBusEvents
             {
                 if(mainHand.getItem() == JMItems.IMMORTALITY_SWORD.get())
                 {
+                    ItemStack newSword = JMItems.UIMMORTALITY_SWORD.get().getDefaultInstance();
+                    newSword.setTag(mainHand.getTag());
+
                     doHandEffects(player);
                     mainHand.shrink(1);
-                    player.setItemInHand(InteractionHand.MAIN_HAND, JMItems.UIMMORTALITY_SWORD.get().getDefaultInstance());
+                    player.setItemInHand(InteractionHand.MAIN_HAND, newSword);
                     event.setCancellationResult(InteractionResult.CONSUME);
                     event.setCanceled(true);
                     return;
@@ -118,7 +119,7 @@ public class JMForgeBusEvents
                 player.getOffhandItem().shrink(1);
             }
 
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ANVIL_DESTROY, SoundSource.PLAYERS, 1.0F, 1.0F);
+            player.level().playSound(null, player.blockPosition(), SoundEvents.ANVIL_DESTROY, SoundSource.PLAYERS, 1.0F, 1.0F);
 
             ((ServerLevel) player.level()).sendParticles(ParticleTypes.DRAGON_BREATH, player.getX(), player.getY() + 1, player.getZ(), 16, 0.3, 0.3, 0.3, 0.2);
         }
