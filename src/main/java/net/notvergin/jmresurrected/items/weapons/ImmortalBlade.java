@@ -2,6 +2,7 @@ package net.notvergin.jmresurrected.items.weapons;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
@@ -21,14 +22,23 @@ public class ImmortalBlade extends SwordItem
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
     {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-        pTooltipComponents.add(Component.literal("Unbreakable")
-                .withStyle(style -> style.withColor(TextColor.fromRgb(0xeb4034))));
     }
 
     @Override
-    public boolean isDamageable(ItemStack stack) {
-        return false;
+    public void inventoryTick(ItemStack stack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        if(!stack.hasTag() || !stack.getTag().contains("Unbreakable")) {
+            stack.getOrCreateTag().putBoolean("Unbreakable", true);
+        }
+
+        super.inventoryTick(stack, pLevel, pEntity, pSlotId, pIsSelected);
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack pStack) {
+        return super.isEnchantable(pStack);
     }
     @Override
-    public boolean isFoil(ItemStack stack) { return true; }
+    public boolean isFoil(ItemStack stack) {
+        return true;
+    }
 }
