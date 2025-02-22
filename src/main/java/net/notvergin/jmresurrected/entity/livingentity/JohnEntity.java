@@ -37,10 +37,6 @@ import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
 public class JohnEntity extends Monster
 {
-    public JohnEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-    }
-
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
 
@@ -50,8 +46,7 @@ public class JohnEntity extends Monster
 
     public boolean hasTarget = false;
 
-    private void setupAnimationStates()
-    {
+    private void setupAnimationStates() {
         if (this.idleAnimationTimeout <= 0) {
             this.idleAnimationTimeout = this.random.nextInt(40) + 80;
             this.idleAnimationState.start(this.tickCount);
@@ -73,6 +68,10 @@ public class JohnEntity extends Monster
         }
 
         this.walkAnimation.update(f, 0.2F);
+    }
+
+    public JohnEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
+        super(pEntityType, pLevel);
     }
 
     public static AttributeSupplier.Builder createAttributes()
@@ -185,7 +184,7 @@ public class JohnEntity extends Monster
 
     @Override
     public int getExperienceReward() {
-        return 45;
+        return 50;
     }
 
     public static boolean canSpawn(EntityType<JohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosition, RandomSource random)
