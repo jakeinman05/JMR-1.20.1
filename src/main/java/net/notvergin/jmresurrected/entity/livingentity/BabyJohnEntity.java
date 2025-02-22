@@ -71,41 +71,7 @@ public class BabyJohnEntity extends Monster
     private int attackTicks = 0;
     private final double defaultDamage = this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
 
-    public BabyJohnEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ALPHA, false);
-        this.entityData.define(LEAPING, false);
-        this.entityData.define(FLEEING, false);
-        this.entityData.define(SUMMONED_ALLIES, false);
-    }
-
-
-
-    @Override
-    public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
-        super.readAdditionalSaveData(pCompound);
-        this.setAlpha(pCompound.getBoolean("Alpha"));
-        this.setLeaping(pCompound.getBoolean("Leaping"));
-        this.setFleeing(pCompound.getBoolean("Fleeing"));
-        this.setSummonedAllies(pCompound.getBoolean("SummonedAllies"));
-    }
-
-    @Override
-    public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
-        super.addAdditionalSaveData(pCompound);
-        pCompound.putBoolean("Alpha", this.isAlpha());
-        pCompound.putBoolean("Leaping", this.isLeaping());
-        pCompound.putBoolean("Fleeing", this.isFleeing());
-        pCompound.putBoolean("SummonedAllies", this.hasSummonedAllies());
-    }
-
-    private void setupAnimationStates()
-    {
+    private void setupAnimationStates() {
         if(this.isLeaping())
             this.jumpAnimationState.start(this.tickCount);
         else
@@ -130,6 +96,37 @@ public class BabyJohnEntity extends Monster
         }
 
         this.walkAnimation.update(f, 0.2F);
+    }
+
+    public BabyJohnEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
+        super(pEntityType, pLevel);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ALPHA, false);
+        this.entityData.define(LEAPING, false);
+        this.entityData.define(FLEEING, false);
+        this.entityData.define(SUMMONED_ALLIES, false);
+    }
+
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.setAlpha(pCompound.getBoolean("Alpha"));
+        this.setLeaping(pCompound.getBoolean("Leaping"));
+        this.setFleeing(pCompound.getBoolean("Fleeing"));
+        this.setSummonedAllies(pCompound.getBoolean("SummonedAllies"));
+    }
+
+    @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        pCompound.putBoolean("Alpha", this.isAlpha());
+        pCompound.putBoolean("Leaping", this.isLeaping());
+        pCompound.putBoolean("Fleeing", this.isFleeing());
+        pCompound.putBoolean("SummonedAllies", this.hasSummonedAllies());
     }
 
     public static AttributeSupplier createAttributes()
@@ -173,7 +170,7 @@ public class BabyJohnEntity extends Monster
             setSummonedAllies(true);
         }
 
-        if(this.tickCount % 60 == 0) {
+        if(this.tickCount % 30 == 0) {
             if(!this.hasAlpha && this.alpha == null) {
                 List<BabyJohnEntity> near = this.level().getNearbyEntities(BabyJohnEntity.class, TargetingConditions.forNonCombat(), this, this.getBoundingBox().inflate(10.0F));
                 for(BabyJohnEntity nearby : near)
@@ -286,7 +283,7 @@ public class BabyJohnEntity extends Monster
 
     @Override
     public int getExperienceReward() {
-        return this.isAlpha() ? 15 : super.getExperienceReward();
+        return this.isAlpha() ? 20 : super.getExperienceReward();
     }
 
     @Override
@@ -368,6 +365,12 @@ public class BabyJohnEntity extends Monster
 
     public static boolean canSpawn(EntityType<BabyJohnEntity> pEntity, ServerLevelAccessor pLevel, MobSpawnType pSpawnType, BlockPos sPosition, RandomSource random) {
         if (pLevel instanceof ServerLevel sLevel) {
+
+            DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
+            float localDifficulty = difficulty.getEffectiveDifficulty();
+
+            alphaSummonCount = localDifficulty > 1.49 ? localDifficulty * random.nextInt(3) + 1 : 1;
+
             long gameTime = sLevel.getGameTime();
             long daysPassed = gameTime / 24000L;
             if(daysPassed < 4) return false;
@@ -378,11 +381,6 @@ public class BabyJohnEntity extends Monster
                     sLevel.getLevelData().getZSpawn());
             double distFromSpawn = Math.sqrt(sPosition.distSqr(worldSpawn));
             if(distFromSpawn < 500.0D) return false;
-
-            DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
-            float localDifficulty = difficulty.getEffectiveDifficulty();
-
-            alphaSummonCount = localDifficulty > 1 ? localDifficulty * random.nextInt(3) + 1 : 1;
 
             double k = 1.1d; // slope factor
             double x0 = 3.6d; // inflection point
@@ -406,6 +404,10 @@ public class BabyJohnEntity extends Monster
     public @Nullable SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         if(Math.random() >= 0.9)
             this.setAlpha(true);
+
+        if(Math.random() > 0.6) {
+            this.summonGroup(this, this.random.nextInt(3));
+        }
 
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
@@ -477,22 +479,13 @@ public class BabyJohnEntity extends Monster
                 else {
                     john.getNavigation().moveTo(target, 1.0D);
                     if(john.attackTicks <= 0) {
-                        if(checkDamage(target))
-                        {
+                        if(checkDamage(target)) {
                             john.attackTicks = 15;
-                            Vec3 randVec = getRandomPosition(john);
-                            if(randVec != null)
-                                john.getNavigation().moveTo(randVec.x, randVec.y, randVec.z, 1.0D);
                         }
                     }
                 }
             }
 
-        }
-
-        public Vec3 getRandomPosition(PathfinderMob entity)
-        {
-            return DefaultRandomPos.getPos(entity, 10, 5);
         }
 
         public boolean checkDamage(LivingEntity target) {
