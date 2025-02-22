@@ -3,6 +3,7 @@ package net.notvergin.jmresurrected.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
@@ -35,6 +36,11 @@ public class RenderBabyJohn extends MobRenderer<BabyJohnEntity, BabyJohnModel<Ba
                 return RenderType.eyes(ALPHA_EYES);
             }
         });
+    }
+
+    @Override
+    public boolean shouldRender(BabyJohnEntity entity, Frustum frustum, double x, double y, double z) {
+        return super.shouldRender(entity, frustum, x, y, z) || entity.distanceToSqr(x, y, z) < 16384;
     }
 
     @Override
