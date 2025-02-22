@@ -19,12 +19,12 @@ public class JMEntites
     public static final RegistryObject<EntityType<JohnEntity>> JOHN =
             ENTITY_TYPES.register("john", () -> EntityType.Builder.of(JohnEntity::new, MobCategory.MONSTER)
                     .sized(0.8F, 4.0F)
-                    .setTrackingRange(12)
+                    .setTrackingRange(10)
                     .build("john"));
     public static final RegistryObject<EntityType<BabyJohnEntity>> BABYJOHN =
             ENTITY_TYPES.register("babyjohn", () -> EntityType.Builder.of(BabyJohnEntity::new, MobCategory.MONSTER)
                     .sized(0.5F, 0.9F)
-                    .setTrackingRange(12)
+                    .setTrackingRange(10)
                     .build("babyjohn"));
 
     public static void register(IEventBus eventBus)
