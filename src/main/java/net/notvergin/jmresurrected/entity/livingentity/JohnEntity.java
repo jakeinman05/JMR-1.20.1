@@ -205,7 +205,7 @@ public class JohnEntity extends Monster
             DifficultyInstance difficulty = sLevel.getCurrentDifficultyAt(sPosition);
             float localDifficulty = difficulty.getEffectiveDifficulty();
 
-            double k = 1.6d;  // slope factor
+            double k = 1.4d;  // slope factor
             double x0 = 3.7d; // inflection point
 
             // sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve
