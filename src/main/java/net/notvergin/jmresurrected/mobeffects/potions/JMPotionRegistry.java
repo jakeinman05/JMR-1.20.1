@@ -12,8 +12,7 @@ import static net.notvergin.jmresurrected.JohnModResurrected.MODID;
 
 public class JMPotionRegistry
 {
-    public static final DeferredRegister<Potion> POTIONS =
-            DeferredRegister.create(ForgeRegistries.POTIONS, MODID);
+    public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, MODID);
 
     public static final RegistryObject<Potion> IMMORTAL_POTION = POTIONS.register("immortal_potion",
             () -> new Potion(new MobEffectInstance(JMMobEffects.IMMORTAL_EFFECT.get(), 600)));

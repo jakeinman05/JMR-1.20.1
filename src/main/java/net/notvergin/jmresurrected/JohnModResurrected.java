@@ -73,7 +73,7 @@ public class JohnModResurrected
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        RegisterBrewingRecipe.registerCustomBrewingRecipes();
+        RegisterBrewingRecipe.register(event);
     }
 
     @SubscribeEvent

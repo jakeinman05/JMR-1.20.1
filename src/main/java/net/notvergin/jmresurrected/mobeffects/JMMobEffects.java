@@ -16,7 +16,7 @@ public class JMMobEffects
             DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, MODID);
 
     public static final RegistryObject<ImmortalityEffect> IMMORTAL_EFFECT = MOB_EFFECTS.register("immortal",
-            () -> new ImmortalityEffect(MobEffectCategory.BENEFICIAL, 0X1c0508));
+            () -> new ImmortalityEffect(MobEffectCategory.NEUTRAL, 0X1c0508));
 
     public static void register(IEventBus bus)
     {
