@@ -40,5 +40,11 @@
     "sounds": [
       "jmresurrected:perennial_activate"
     ]
+  },
+  "perennial_active": {
+    "subtitles": "Perennial Active",
+    "sounds": [
+      "jmresurrected:perennial_active"
+    ]
   }
 }

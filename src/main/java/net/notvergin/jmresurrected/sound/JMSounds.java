@@ -21,6 +21,7 @@ public class JMSounds
     public static final RegistryObject<SoundEvent> BABYJOHN_HURT = registerSoundEvents("babyjohn_hurt");
     public static final RegistryObject<SoundEvent> BABYJOHN_JUMP = registerSoundEvents("babyjohn_jump");
     public static final RegistryObject<SoundEvent> PERENNIAL_ACTIVATE = registerSoundEvents("perennial_activate");
+    public static final RegistryObject<SoundEvent> PERENNIAL_ACTIVE = registerSoundEvents("perennial_active");
 
     private static RegistryObject<SoundEvent> registerSoundEvents(String name)
     {

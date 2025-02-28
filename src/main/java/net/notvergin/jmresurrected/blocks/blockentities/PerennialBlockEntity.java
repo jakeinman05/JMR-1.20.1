@@ -51,6 +51,11 @@ public class PerennialBlockEntity extends BaseContainerBlockEntity {
             }
 
             if(perennial.isActive()) {
+
+                if(level.getBlockTicks().count() % 43 == 0) {
+                    level.playSound(null, perennial.worldPosition, JMSounds.PERENNIAL_ACTIVE.get(), SoundSource.BLOCKS, 0.03F, 0.85F);
+                }
+
                 if(perennial.effectTicks > 0) {
                     perennial.effectTicks--;
                 }
