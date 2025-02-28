@@ -6,7 +6,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.npc.Villager;
-import net.notvergin.jmresurrected.JohnModResurrected;
 import net.notvergin.jmresurrected.items.weapons.ImmortalBlade;
 import net.notvergin.jmresurrected.sound.JMSounds;
 import net.minecraft.core.BlockPos;
@@ -33,7 +32,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,8 +44,6 @@ public class JohnEntity extends Monster {
     private static final EntityDataAccessor<Boolean> STALKING = SynchedEntityData.defineId(JohnEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> HAS_STALKED = SynchedEntityData.defineId(JohnEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> STUCK = SynchedEntityData.defineId(JohnEntity.class, EntityDataSerializers.BOOLEAN);
-
-    private final Logger LOG = JohnModResurrected.LOGGER;
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
@@ -133,12 +129,9 @@ public class JohnEntity extends Monster {
         super.readAdditionalSaveData(compound);
 
         this.setChasing(compound.getBoolean("Chasing"));
-        LOG.info("READ Chasing: {}", this.isChasing());
         this.setStuck(compound.getBoolean("Stuck"));
         this.setStalking(compound.getBoolean("isStalking"));
-        LOG.info("READ IsStalking: {}", this.isStalking());
         this.setStalked(compound.getBoolean("hasStalked"));
-        LOG.info("READ HasStalked: {}", this.hasStalked());
     }
 
     @Override
@@ -161,12 +154,10 @@ public class JohnEntity extends Monster {
         super.tick();
 
         if (this.getTarget() != null && this.getTarget() instanceof Player && this.target == null) {
-            LOG.info("John Target set to: {}", this.getTarget());
             this.target = (Player) this.getTarget();
         }
 
         if (this.target != null && (!this.target.isAlive() || target.isCreative())) {
-            LOG.info("John Target has been set to null");
             this.target = null;
             this.setStalked(false);
             this.setChasing(false);
@@ -183,7 +174,6 @@ public class JohnEntity extends Monster {
 
                 if (stuckTime > 60 && !this.isStuck()) {
                     setStuck(true);
-                    LOG.info("John stuck");
                 } else {
                     setStuck(false);
                 }
@@ -484,8 +474,8 @@ public class JohnEntity extends Monster {
                     }
                     john.setDeltaMovement(vec31.x, jumpHeight, vec31.z);
                 } else if (john.distanceToSqr(target.getX(), target.getY(), target.getZ()) >= 256.59) {
-                    double xOff = (john.getRandom().nextDouble() - 0.5) * 100;
-                    double zOff = (john.getRandom().nextDouble() - 0.5) * 100;
+                    double xOff = (john.getRandom().nextDouble() - 0.5) * 150;
+                    double zOff = (john.getRandom().nextDouble() - 0.5) * 150;
 
                     double xTeleport = john.getX() + xOff;
                     double zTeleport = john.getZ() + zOff;
