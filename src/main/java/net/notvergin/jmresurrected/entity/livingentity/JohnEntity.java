@@ -310,6 +310,11 @@ public class JohnEntity extends Monster {
     }
 
     @Override
+    protected float getSoundVolume() {
+        return 0.8F;
+    }
+
+    @Override
     protected @Nullable SoundEvent getAmbientSound() {
         if (!this.isStalking())
             return JMSounds.JOHN_AMBIENT.get();
