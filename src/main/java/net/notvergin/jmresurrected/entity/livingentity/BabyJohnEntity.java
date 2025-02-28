@@ -149,7 +149,7 @@ public class BabyJohnEntity extends Monster
 
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Villager.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, true));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this, BabyJohnEntity.class).setAlertOthers());
     }
 
@@ -236,7 +236,7 @@ public class BabyJohnEntity extends Monster
             this.avoidEntity = this.getLastHurtByMob();
         }
 
-        if(!this.level().isClientSide && isFleeing() && !(this.fleeTimeoutTicks > 0) && (this.fleeTicks > 0 || this.distanceToSqr(this.avoidEntity.position()) < 32.0) && (this.avoidEntity instanceof Player player && !player.isCreative())) {
+        if(!this.level().isClientSide && isFleeing() && !(this.fleeTimeoutTicks > 0) && this.avoidEntity != null && (this.fleeTicks > 0 || this.distanceToSqr(this.avoidEntity.position()) < 32.0)) {
             fleeFromTargetPosition(this.avoidEntity);
         }
 
@@ -386,8 +386,8 @@ public class BabyJohnEntity extends Monster
             double x0 = 3.6d; // inflection point
 
             // sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve sigmoid curve
-            double spawnChance = 1.0 / (1.0 + Math.exp(-k * (localDifficulty - x0)));
-            spawnChance = Math.min(1.0, Math.max(0.0, spawnChance)); // clamps to 0-1 range
+            double spawnChance = 1.0 / (1.0 + Math.exp(-k * (localDifficulty - x0))) + 0.03;
+            spawnChance = Math.min(0.60, Math.max(0.0, spawnChance)); // clamps to 0-1 range
 
             if (sLevel.isRainingAt(sPosition) || sLevel.isThundering()) {
                 spawnChance *= 1.2F;  // increase spawn chance during rain or thunder
@@ -423,75 +423,75 @@ public class BabyJohnEntity extends Monster
 
     static class BabyJohnMeleeGoal extends Goal
     {
-        BabyJohnEntity john;
+        BabyJohnEntity babyjohn;
 
         public BabyJohnMeleeGoal(BabyJohnEntity john) {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-            this.john = john;
+            this.babyjohn = john;
         }
 
         @Override
         public boolean canUse() {
-            return john.getTarget() != null && john.getTarget().isAlive() && !john.isFleeing() && !(john.getTarget() instanceof Player player && player.isCreative());
+            return babyjohn.getTarget() != null && babyjohn.getTarget().isAlive() && !babyjohn.isFleeing() && !(babyjohn.getTarget() instanceof Player player && player.isCreative());
         }
 
         @Override
         public boolean canContinueToUse() {
-            return !this.john.isFleeing();
+            return !this.babyjohn.isFleeing();
         }
 
         @Override
         public void stop() {
-            john.setLeaping(false);
+            babyjohn.setLeaping(false);
         }
 
         @Override
         public void tick() {
-            LivingEntity target = john.getTarget();
-            if(target != null && target.isAlive() && !this.john.level().isClientSide) {
-                john.lookControl.setLookAt(target);
-                int jumpChance = john.isAlpha() ? 15 : 25;
-                john.wantsToJump = john.getRandom().nextInt(jumpChance) == 0;
-                double dist = john.distanceTo(target);
+            LivingEntity target = babyjohn.getTarget();
+            if(target != null && target.isAlive() && !this.babyjohn.level().isClientSide) {
+                babyjohn.lookControl.setLookAt(target);
+                int jumpChance = babyjohn.isAlpha() ? 15 : 25;
+                babyjohn.wantsToJump = babyjohn.getRandom().nextInt(jumpChance) == 0;
+                double dist = babyjohn.distanceTo(target);
 
-                if(john.isLeaping()) {
-                    if(john.attackTicks <= 0) {
+                if(babyjohn.isLeaping()) {
+                    if(babyjohn.attackTicks <= 0) {
                         if(checkDamage(target)) {
-                            john.attackTicks = 30;
+                            babyjohn.attackTicks = 30;
                         }
                     }
 
-                    if(john.onGround() || john.isInWaterOrBubble()) {
-                        john.setLeaping(false);
+                    if(babyjohn.onGround() || babyjohn.isInWaterOrBubble()) {
+                        babyjohn.setLeaping(false);
                     }
                 }
-                else if (dist > 2.0F && dist < 7.0F && john.wantsToJump && !john.isLeaping())
+
+                else if (dist > 2.0F && dist < 7.0F && babyjohn.wantsToJump && !babyjohn.isLeaping())
                 {
-                    john.setLeaping(true);
-                    this.john.playSound(JMSounds.BABYJOHN_JUMP.get(), 0.5F, 1.0F + john.random.nextFloat() * 0.2F);
-                    Vec3 johnVec = john.getDeltaMovement();
-                    Vec3 targetVec = new Vec3(target.getX() - john.getX(), 0, target.getZ() - john.getZ());
+                    babyjohn.setLeaping(true);
+                    this.babyjohn.playSound(JMSounds.BABYJOHN_JUMP.get(), 0.5F, 1.0F + babyjohn.random.nextFloat() * 0.2F);
+                    Vec3 johnVec = babyjohn.getDeltaMovement();
+                    Vec3 targetVec = new Vec3(target.getX() - babyjohn.getX(), 0, target.getZ() - babyjohn.getZ());
                     if(targetVec.lengthSqr() > 1.0E-7D)
                         targetVec = targetVec.normalize().scale(0.9F).add(johnVec.scale(0.5));
-                    john.setDeltaMovement(targetVec.x, 0.5D, targetVec.z);
+                    babyjohn.setDeltaMovement(targetVec.x, 0.5D, targetVec.z);
                 }
-                // chance to jump
+
                 else {
-                    john.getNavigation().moveTo(target, 1.0D);
-                    if(john.attackTicks <= 0) {
+                    babyjohn.getNavigation().moveTo(target, 1.0D);
+                    if(babyjohn.attackTicks <= 0) {
                         if(checkDamage(target)) {
-                            john.attackTicks = 15;
+                            babyjohn.attackTicks = 15;
                         }
                     }
                 }
             }
-
         }
 
         public boolean checkDamage(LivingEntity target) {
-            if(john.hasLineOfSight(target) && john.distanceTo(target) < john.getBbWidth() + target.getBbWidth() + 0.5)
+            if(babyjohn.hasLineOfSight(target) && babyjohn.distanceTo(target) < babyjohn.getBbWidth() + target.getBbWidth() + 0.5)
             {
-                return target.hurt(target.damageSources().mobAttack(john), (float) john.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                return target.hurt(target.damageSources().mobAttack(babyjohn), (float) babyjohn.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
             }
             return false;
         }
