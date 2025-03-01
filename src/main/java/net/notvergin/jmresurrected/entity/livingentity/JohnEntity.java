@@ -6,6 +6,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.notvergin.jmresurrected.items.weapons.ImmortalBlade;
 import net.notvergin.jmresurrected.sound.JMSounds;
 import net.minecraft.core.BlockPos;
@@ -76,6 +78,7 @@ public class JohnEntity extends Monster {
 
     public JohnEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        this.setPathfindingMalus(BlockPathTypes.WATER, 3.0F);
         this.setMaxUpStep(1.0f);
     }
 
@@ -97,7 +100,7 @@ public class JohnEntity extends Monster {
         this.goalSelector.addGoal(3, new JohnReachTargetGoal(this));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 32.0f));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.8f));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0f));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, false));
@@ -305,6 +308,13 @@ public class JohnEntity extends Monster {
     }
 
     @Override
+    protected void playStepSound(BlockPos pPos, BlockState pState) {
+        if(!this.isStalking()) {
+            super.playStepSound(pPos, pState);
+        }
+    }
+
+    @Override
     protected @Nullable SoundEvent getAmbientSound() {
         if (!this.isStalking())
             return JMSounds.JOHN_AMBIENT.get();
@@ -437,12 +447,20 @@ public class JohnEntity extends Monster {
             if (john.target != null && !john.level().isClientSide) {
 
                 if (john.position().distanceTo(john.target.position()) < 8.0) {
+                    john.getLookControl().setLookAt(john.target);
                     Vec3 targetLookVec = john.target.getLookAngle().normalize();
-                    Vec3 oppositeLookVec = john.target.position().subtract(targetLookVec.scale(john.position().distanceTo(john.target.position()) - 0.1));
+                    Vec3 oppositeLookVec = john.target.position().subtract(targetLookVec.scale(john.position().distanceTo(john.target.position()) - 0.05D));
 
-                    john.getNavigation().moveTo(oppositeLookVec.x(), oppositeLookVec.y(), oppositeLookVec.z(), 1.5D);
-                } else
+                    john.getNavigation().moveTo(oppositeLookVec.x(), oppositeLookVec.y(), oppositeLookVec.z(), 1.8D);
+                }
+                else if(john.distanceTo(john.target) > 24.0D) {
+                    john.getLookControl().setLookAt(john.target);
+                    john.getNavigation().moveTo(john.target, 2.0D);
+                }
+                else {
+                    john.getLookControl().setLookAt(john.target);
                     john.getNavigation().moveTo(john.target, 1.0D);
+                }
             }
         }
     }
